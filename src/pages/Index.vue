@@ -24,13 +24,16 @@
           <div :class="[item.liked ? 'liked' : 'like', '']">{{item.like_count}}</div>
         </div>
       </div>
+      <div class="designer">{{item.designer}}</div>
     </div>
   </div>
-  <div class="order-btn">我要预约</div>
+  <order-btn></order-btn>
 </div>
 </template>
 
 <script>
+import OrderBtn from '@/components/OrderBtn.vue'
+
 export default {
   data () {
     return {
@@ -41,7 +44,8 @@ export default {
           desc: '2室1厅/66m²/时尚简约风',
           view_count: 2000,
           like_count: 1000,
-          liked: false
+          liked: false,
+          designer: '设计 | 张小姐'
         },
         {
           img: require('../assets/imgs/tmp/1.jpg'),
@@ -49,7 +53,8 @@ export default {
           desc: '2室1厅/66m²/时尚简约风',
           view_count: 888,
           like_count: 666,
-          liked: true
+          liked: true,
+          designer: '设计 | 张小姐'
         },
         {
           img: require('../assets/imgs/tmp/1.jpg'),
@@ -57,10 +62,14 @@ export default {
           desc: '2室1厅/66m²/时尚简约风',
           view_count: 2000,
           like_count: 1000,
-          liked: false
+          liked: false,
+          designer: '设计 | 张小姐'
         }
       ]
     }
+  },
+  components: {
+    OrderBtn
   }
 }
 </script>
@@ -100,6 +109,7 @@ header {
 .list-cont {
   padding: .2rem;
   .list-item {
+    position: relative;
     margin-bottom: .4rem;
     &:last-child {
       margin-bottom: 0;
@@ -146,14 +156,14 @@ header {
       background-size: .32rem auto;
     }
   }
-}
-
-.order-btn {
-  position: fixed;
-  right: .3rem;
-  bottom: .3rem;
-  padding: .2rem .2rem .2rem .6rem;
-  background: rgba(198, 164, 53, .5) url('../assets/imgs/clock.png') no-repeat .2rem center;
-  background-size: .3rem auto;
+  .designer {
+    position: absolute;
+    right: .3rem;
+    top: .3rem;
+    padding: .05rem;
+    font-size: .24rem;
+    color: #fff;
+    background-color: #20504e;
+  }
 }
 </style>
