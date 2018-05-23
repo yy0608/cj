@@ -1,5 +1,6 @@
 'use strict'
 const path = require('path')
+const glob = require('glob')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
@@ -19,11 +20,32 @@ const createLintingRule = () => ({
   }
 })
 
+const getEntries = globPath => {
+  let files = glob.sync(globPath)
+
+  let entries = {}, entry, dirname, basename, pathname, extname
+
+  files.forEach(item => {
+    entry = item
+    dirname = path.dirname(entry)
+    extname = path.extname(entry)
+    basename = path.basename(entry, extname) // 文件名
+    pathname = path.join(dirname, basename)
+
+    if (extname === '.html') {
+      entries[pathname] = entry
+    } else if (extname === '.js') {
+      entries[basename] = entry
+    }
+
+  })
+
+  return entries
+}
+
 module.exports = {
   context: path.resolve(__dirname, '../'),
-  entry: {
-    app: './src/main.js'
-  },
+  entry: getEntries('./src/*.js'),
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
