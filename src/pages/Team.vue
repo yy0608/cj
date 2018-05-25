@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+import { origin } from '@/config'
 import OrderBtn from '@/components/OrderBtn.vue'
 
 export default {
@@ -63,6 +65,19 @@ export default {
   },
   components: {
     OrderBtn
+  },
+  created () {
+    axios({
+      url: origin + '/cjjjapi/wx/findBizBizTeamGroup.action',
+      method: 'post',
+      data: { id: 'tuanduizhanshi' }
+    })
+      .then(res => {
+        console.log(res.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 }
 </script>

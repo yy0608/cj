@@ -3,6 +3,10 @@
 import Vue from 'vue'
 import App from './pages/Company.vue'
 
+import { Toast } from 'mint-ui'
+
+Vue.prototype.$toast = Toast
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

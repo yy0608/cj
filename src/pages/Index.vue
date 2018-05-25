@@ -2,14 +2,15 @@
 <div class="page-item">
   <header>
     <div class="nav-item">
-      <div class="inner">城市</div>
+      <div class="inner" @click="getTypeList('city')">城市</div>
     </div>
     <div class="nav-item">
-      <div class="inner">楼盘</div>
+      <div class="inner" @click="getTypeList('area')">楼盘</div>
     </div>
     <div class="nav-item">
-      <div class="inner">户型</div>
+      <div class="inner" @click="getTypeList('type')">户型</div>
     </div>
+    <div class="list-cont"></div>
   </header>
   <div class="list-cont">
     <div class="list-item" v-for="(item, index) in listData" :key="index">
@@ -32,11 +33,14 @@
 </template>
 
 <script>
+import axios from 'axios'
+import { origin } from '@/config'
 import OrderBtn from '@/components/OrderBtn.vue'
 
 export default {
   data () {
     return {
+      typeList: [],
       listData: [
         {
           img: require('../assets/imgs/tmp/1.jpg'),
@@ -70,6 +74,26 @@ export default {
   },
   components: {
     OrderBtn
+  },
+  methods: {
+    getTypeList (type) {
+      axios({
+        url: origin + '/cjjjapi/wx/findBizHouses.action',
+        method: 'post',
+        data: { type }
+      })
+        .then(res => {
+          if (res.data.code) {
+            return this.$toast(res.data.msg)
+          }
+          console.log(res.data)
+          this.typeList = res.data.data
+        })
+        .catch(err => {
+          console.log(err)
+          this.$toast('客户端请求出错')
+        })
+    }
   }
 }
 </script>
