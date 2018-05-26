@@ -3,9 +3,11 @@
 import Vue from 'vue'
 import App from './pages/Index.vue'
 
-import { Toast } from 'mint-ui'
+import { Toast, Loadmore, Indicator } from 'mint-ui'
 
+Vue.component(Loadmore.name, Loadmore)
 Vue.prototype.$toast = Toast
+Vue.prototype.$indicator = Indicator
 
 Vue.config.productionTip = false
 

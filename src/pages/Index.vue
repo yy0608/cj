@@ -10,24 +10,35 @@
     <div class="nav-item">
       <div class="inner" @click="getTypeList('type')">户型</div>
     </div>
-    <div class="list-cont"></div>
-  </header>
-  <div class="list-cont">
-    <div class="list-item" v-for="(item, index) in listData" :key="index">
-      <div class="img-cont">
-        <img :src="item.img">
-      </div>
-      <div class="title">{{item.title}}</div>
-      <div class="info-cont">
-        <div class="desc">{{item.desc}}</div>
-        <div class="tags">
-          <div class="views">{{item.view_count}}</div>
-          <div :class="[item.liked ? 'liked' : 'like', '']">{{item.like_count}}</div>
-        </div>
-      </div>
-      <div class="designer">{{item.designer}}</div>
+    <!-- <div class="type-list-cont" v-show="showTypeCont"> -->
+    <div class="type-list-cont" :style="typeStyle">
+      <div
+        class="type-list-item"
+        @click="changeType(item.id)"
+        v-for="item in typeList"
+        :key="item.id">{{item.name}}</div>
     </div>
-  </div>
+  </header>
+  <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
+    <div class="list-cont" v-if="caseList.length">
+      <div class="list-item" v-for="(item, index) in caseList" :key="item.id">
+        <div class="img-cont">
+          <img :src="origin + '/cjjjapi' + item.mainPicPath">
+        </div>
+        <div class="title">{{item.cityName}}/{{item.areaName}}/精装</div>
+        <div class="info-cont">
+          <div class="desc">{{item.typeName}}/{{item.styleInfo}}</div>
+          <div class="tags">
+            <div class="views">{{item.readCount}}</div>
+            <div :class="[item.liked ? 'liked' : 'like', '']" @click="like(item.id, index)">{{item.favoriteCount}}</div>
+          </div>
+        </div>
+        <div class="designer">{{item.designer}}</div>
+      </div>
+    </div>
+    <div class="no-data" v-else>暂无数据</div>
+  </mt-loadmore>
+  <div class="mask-cont" v-show="typeStyle['max-height']" @touchstart="maskTouch($event)"></div>
   <order-btn></order-btn>
 </div>
 </template>
@@ -41,58 +52,168 @@ export default {
   data () {
     return {
       typeList: [],
-      listData: [
-        {
-          img: require('../assets/imgs/tmp/1.jpg'),
-          title: '深圳/万科青城三期/精装',
-          desc: '2室1厅/66m²/时尚简约风',
-          view_count: 2000,
-          like_count: 1000,
-          liked: false,
-          designer: '设计 | 张小姐'
-        },
-        {
-          img: require('../assets/imgs/tmp/1.jpg'),
-          title: '深圳/万科青城三期/精装',
-          desc: '2室1厅/66m²/时尚简约风',
-          view_count: 888,
-          like_count: 666,
-          liked: true,
-          designer: '设计 | 张小姐'
-        },
-        {
-          img: require('../assets/imgs/tmp/1.jpg'),
-          title: '深圳/万科青城三期/精装',
-          desc: '2室1厅/66m²/时尚简约风',
-          view_count: 2000,
-          like_count: 1000,
-          liked: false,
-          designer: '设计 | 张小姐'
-        }
-      ]
+      curType: '',
+      curId: '',
+      pageNo: 1,
+      pageSize: 15,
+      allLoaded: false,
+      yjjjCaseLikedIdArray: [],
+      origin,
+      caseList: [],
+      typeStyle: { 'max-height': 0 }
     }
   },
   components: {
     OrderBtn
   },
+  created () {
+    this.getCaseList()
+    try {
+      this.yjjjCaseLikedIdArray = JSON.parse(localStorage.yjjjCaseLikedIdArray)
+    } catch (e) {
+      this.yjjjCaseLikedIdArray = []
+    }
+  },
+  watch: {
+    typeStyle (newVal) {
+      if (!newVal['max-height']) {
+        setTimeout(() => {
+          this.typeList = []
+        }, 200)
+      }
+    },
+    caseList (newVal) {
+      for (let i = 0; i < newVal.length; i++) {
+        if (this.yjjjCaseLikedIdArray.includes(this.caseList[i].id)) {
+          this.$set(this.caseList[i], 'liked', true)
+        }
+      }
+    }
+  },
   methods: {
+    maskTouch (e) {
+      this.typeStyle = { 'max-height': 0 }
+      e.preventDefault()
+    },
     getTypeList (type) {
+      this.$indicator.open({ spinnerType: 'fading-circle' })
+      if (type === this.curType) {
+        if (!this.typeStyle['max-height']) {
+          this.typeStyle = { 'max-height': '999px' }
+        } else {
+          this.typeStyle = { 'max-height': 0 }
+        }
+      } else {
+        this.typeStyle = { 'max-height': '999px' }
+      }
+      this.curType = type
+      // this.typeList = []
+
       axios({
         url: origin + '/cjjjapi/wx/findBizHouses.action',
         method: 'post',
         data: { type }
       })
         .then(res => {
+          this.$indicator.close()
           if (res.data.code) {
             return this.$toast(res.data.msg)
           }
-          console.log(res.data)
           this.typeList = res.data.data
         })
         .catch(err => {
           console.log(err)
           this.$toast('客户端请求出错')
         })
+    },
+    changeType (id) {
+      this.curId = id
+      this.typeStyle = { 'max-height': 0 }
+      this.getCaseList(true)
+    },
+    getCaseList (init) {
+      this.$indicator.open({ spinnerType: 'fading-circle' })
+      if (init) {
+        this.pageNo = 1
+        this.allLoaded = false
+      }
+      let options = {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      }
+      switch (this.curType) {
+        case 'city':
+          options = Object.assign({}, { cityId: this.curId })
+          break
+        case 'area':
+          options = Object.assign({}, { buildingId: this.curId })
+          break
+        case 'type':
+          options = Object.assign({}, { typeId: this.curId })
+          break
+      }
+      axios({
+        url: origin + '/cjjjapi/wx/findBizHouseBeautifys.action',
+        method: 'post',
+        data: options
+      })
+        .then(res => {
+          this.$indicator.close()
+          this.$refs.loadmore.onBottomLoaded()
+          if (res.data.code) {
+            return this.$toast(res.data.msg)
+          }
+          if (res.data.page.pages === this.pageNo) {
+            this.allLoaded = true
+          }
+          if (init) {
+            this.caseList = res.data.data
+          } else {
+            this.caseList = this.caseList.concat(res.data.data)
+          }
+        })
+        .catch(err => {
+          console.log(err)
+          this.$toast('客户端请求出错')
+        })
+    },
+    like (id, index) {
+      // let count = this.caseList[index].favoriteCount
+      if (this.caseList[index].liked) {
+        return this.$toast('已点赞')
+      }
+      axios({
+        url: origin + '/cjjjapi/wx/saveOrDelBizCollection.action',
+        method: 'post',
+        data: {
+          type: 'save',
+          userId: Date.now(),
+          beautifyId: id
+        }
+      })
+        .then(res => {
+          if (res.data.code) {
+            return this.$toast(res.data.msg)
+          }
+          this.$set(this.caseList[index], 'liked', true)
+          this.caseList[index].favoriteCount++
+          this.yjjjCaseLikedIdArray.push(id)
+          localStorage.yjjjCaseLikedIdArray = JSON.stringify(this.yjjjCaseLikedIdArray)
+        })
+        .catch(err => {
+          console.log(err)
+          this.$toast('客户端请求出错')
+        })
+    },
+    loadBottom () {
+      if (!this.loadmore) {
+        this.pageNo++
+        this.getCaseList()
+      }
+      // this.allLoaded = true
+      // setTimeout(() => {
+      //   this.$refs.loadmore.onBottomLoaded()
+      // }, 2000)
     }
   }
 }
@@ -102,9 +223,40 @@ export default {
 @import '../assets/css/reset.scss';
 @import '../assets/css/common.scss';
 
+body {
+  padding-top: 1rem;
+}
+.mask-cont {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  // background-color: rgba(0, 0, 0, .5);
+}
 header {
   display: flex;
-  position: relative;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+  background-color: #fff;
+  .type-list-cont {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: .9rem;
+    font-size: .3rem;
+    background-color: #fff;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .2s ease;
+    .type-list-item {
+      padding-left: .75rem;
+      line-height: 1rem;
+    }
+  }
   &:after {
     content: '';
     position: absolute;
@@ -189,5 +341,9 @@ header {
     color: #fff;
     background-color: #20504e;
   }
+}
+.no-data {
+  line-height: 2rem;
+  text-align: center;
 }
 </style>
