@@ -1,15 +1,25 @@
 <template>
-<div class="content-cont">
-  <div class="content-inner" v-if="content">
-    <div class="title">{{content.title}}</div>
-  </div>
-</div>
+<div class="rich-content" v-html="richContent"></div>
 </template>
 
 <script>
 export default {
-  props: [ 'content' ]
+  props: [ 'richContent' ]
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.rich-content {
+  padding: .3rem;
+  img {
+    width: 100%;
+    display: block;
+    margin: .3rem auto;
+    max-width: 100%;
+  }
+  p {
+    line-height: .45rem;
+    text-align: justify;
+  }
+}
+</style>

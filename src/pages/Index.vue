@@ -21,7 +21,7 @@
   </header>
   <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
     <div class="list-cont" v-if="caseList.length">
-      <div class="list-item" v-for="(item, index) in caseList" :key="item.id">
+      <div class="list-item" v-for="(item, index) in caseList" :key="item.id" @click="goDetail(item.id)">
         <div class="img-cont">
           <img :src="origin + '/cjjjapi' + item.mainPicPath">
         </div>
@@ -30,10 +30,10 @@
           <div class="desc">{{item.typeName}}/{{item.styleInfo}}</div>
           <div class="tags">
             <div class="views">{{item.readCount}}</div>
-            <div :class="[item.liked ? 'liked' : 'like', '']" @click="like(item.id, index)">{{item.favoriteCount}}</div>
+            <div :class="[item.liked ? 'liked' : 'like', '']" @click.stop="like(item.id, index)">{{item.favoriteCount}}</div>
           </div>
         </div>
-        <div class="designer">{{item.designer}}</div>
+        <div class="designer">设计 | {{item.designer}}</div>
       </div>
     </div>
     <div class="no-data" v-else>暂无数据</div>
@@ -204,6 +204,9 @@ export default {
           console.log(err)
           this.$toast('客户端请求出错')
         })
+    },
+    goDetail (id) {
+      window.location.href = '/detail.html?id=' + id
     },
     loadBottom () {
       if (!this.loadmore) {

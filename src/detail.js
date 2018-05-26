@@ -3,6 +3,10 @@
 import Vue from 'vue'
 import App from './pages/Detail.vue'
 
+import { MessageBox } from 'mint-ui'
+
+Vue.prototype.$messageBox = MessageBox
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
