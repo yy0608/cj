@@ -3,6 +3,12 @@
 import Vue from 'vue'
 import App from './pages/Custom.vue'
 
+import { Toast, Indicator, MessageBox } from 'mint-ui'
+
+Vue.prototype.$toast = Toast
+Vue.prototype.$indicator = Indicator
+Vue.prototype.$messageBox = MessageBox
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

@@ -1,7 +1,7 @@
 <template>
 <div class="page-item">
   <div class="my-slider">
-    <slider ref="slider" :pages="sliderPages" :sliderinit="sliderinit" @slide='slide' @tap='onTap' @init='onInit'>
+    <slider ref="slider" :pages="sliderPages" :sliderinit="sliderinit">
       <!-- 设置loading,可自定义 -->
       <div slot="loading">loading...</div>
     </slider>
@@ -106,14 +106,12 @@ export default {
         }
       })
       .catch(err => {
+        this.$indicator.close()
         console.log(err)
         this.$toast('客户端请求出错')
       })
   },
   methods: {
-    slide () {},
-    onTap () {},
-    onInit () {},
     order () {
       if (!this.form.name.trim()) {
         return this.$toast('请填写姓名')
@@ -129,12 +127,14 @@ export default {
         phone: this.form.phone,
         cityBuilding: this.form.city + this.form.building
       }
+      this.$indicator.open({ spinnerType: 'fading-circle' })
       axios({
         url: origin + '/cjjjapi/wx/saveBizBookingUser.action',
         method: 'post',
         data
       })
         .then(res => {
+          this.$indicator.close()
           if (res.data.code) {
             return this.$toast(res.data.msg)
           }
@@ -145,6 +145,7 @@ export default {
           }, 1000)
         })
         .catch(err => {
+          this.$indicator.close()
           console.log(err)
           this.$toast('客户端请求出错')
         })

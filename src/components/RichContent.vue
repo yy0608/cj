@@ -14,7 +14,7 @@ export default {
   img {
     width: 100%;
     display: block;
-    margin: .3rem auto;
+    margin: 0 auto .2rem 0;
     max-width: 100%;
   }
   p {

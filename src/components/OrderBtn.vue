@@ -1,9 +1,15 @@
 <template>
-<div class="order-btn">我要预约</div>
+<div class="order-btn" @click="goOrder">我要预约</div>
 </template>
 
 <script>
-export default {}
+export default {
+  methods: {
+    goOrder () {
+      window.location.href = '/activity.html'
+    }
+  }
+}
 </script>
 
 <style lang="scss">

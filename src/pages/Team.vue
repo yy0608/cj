@@ -1,23 +1,26 @@
 <template>
 <div class="page-item">
-  <div v-for="(item, index) in teamData" :key="index" class="team-cont-item">
-    <div class="title">{{item.title}}</div>
-    <div v-for="(item2, index2) in item.team" :key="index2" class="team-cont">
+  <div v-for="item in teamList" :key="item.id" class="team-cont-item">
+    <div class="title">{{item.name}}</div>
+    <div v-for="item2 in item.members" :key="item2.id" class="team-cont">
       <div class="team-item">
         <div class="avatar">
-          <img :src="item2.avatar">
+          <img :src="item2.headPicUrl">
         </div>
         <div class="text-cont">
           <div class="title-cont">
             <div class="name">{{item2.name}}</div>
-            <div class="wechat">+ 微信</div>
+            <div class="wechat" @click="handleShowQrUrl(item2.qrUrl)">+ 微信</div>
           </div>
-          <div class="intro">{{item2.intro}}</div>
+          <div class="intro">{{item2.noteInfo}}</div>
         </div>
       </div>
     </div>
   </div>
   <order-btn></order-btn>
+  <div class="qr-cont" v-show="showRrUrl" @click="showRrUrl = false">
+    <img @click.stop="" :src="qrUrl">
+  </div>
 </div>
 </template>
 
@@ -29,55 +32,40 @@ import OrderBtn from '@/components/OrderBtn.vue'
 export default {
   data () {
     return {
-      teamData: [
-        {
-          title: '设计团队',
-          team: [
-            {
-              name: '张佳',
-              avatar: require('../assets/imgs/tmp/avatar.jpg'),
-              intro: '从业12年 擅长欧美风格设计 简约设计风格'
-            },
-            {
-              name: '张佳',
-              avatar: require('../assets/imgs/tmp/avatar.jpg'),
-              intro: '从业12年 擅长欧美风格设计 简约设计风格'
-            }
-          ]
-        },
-        {
-          title: '项目组',
-          team: [
-            {
-              name: '张佳',
-              avatar: require('../assets/imgs/tmp/avatar.jpg'),
-              intro: '从业12年 擅长欧美风格设计 简约设计风格'
-            },
-            {
-              name: '张佳',
-              avatar: require('../assets/imgs/tmp/avatar.jpg'),
-              intro: '从业12年 擅长欧美风格设计 简约设计风格'
-            }
-          ]
-        }
-      ]
+      teamList: [],
+      showRrUrl: false,
+      qrUrl: ''
     }
   },
   components: {
     OrderBtn
   },
   created () {
+    this.$indicator.open({ spinnerType: 'fading-circle' })
     axios({
       url: origin + '/cjjjapi/wx/findBizBizTeamGroup.action',
       method: 'post',
-      data: { id: 'tuanduizhanshi' }
+      data: {}
     })
       .then(res => {
+        this.$indicator.close()
+        if (res.data.code) {
+          return this.$toast(res.data.msg)
+        }
         console.log(res.data)
+        this.teamList = res.data.data
       })
       .catch(err => {
+        this.$indicator.close()
         console.log(err)
+        this.$toast('客户端请求出错')
       })
+  },
+  methods: {
+    handleShowQrUrl (url) {
+      this.showRrUrl = true
+      this.qrUrl = url
+    }
   }
 }
 </script>
@@ -138,5 +126,16 @@ export default {
       color: #666;
     }
   }
+}
+.qr-cont {
+  position: fixed;
+  display: flex;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .75);
+  align-items: center;
+  justify-content: center;
 }
 </style>

@@ -1,12 +1,13 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import App from './pages/Team.vue'
+import App from './pages/Products.vue'
 
-import { Toast, Indicator } from 'mint-ui'
+import { Toast, Indicator, MessageBox } from 'mint-ui'
 
 Vue.prototype.$toast = Toast
 Vue.prototype.$indicator = Indicator
+Vue.prototype.$messageBox = MessageBox
 
 Vue.config.productionTip = false
 

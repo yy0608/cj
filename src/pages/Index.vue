@@ -33,7 +33,7 @@
             <div :class="[item.liked ? 'liked' : 'like', '']" @click.stop="like(item.id, index)">{{item.favoriteCount}}</div>
           </div>
         </div>
-        <div class="designer">设计 | {{item.designer}}</div>
+        <div class="designer" @click.stop="goTeam">设计 | {{item.designer}}</div>
       </div>
     </div>
     <div class="no-data" v-else>暂无数据</div>
@@ -123,6 +123,7 @@ export default {
           this.typeList = res.data.data
         })
         .catch(err => {
+          this.$indicator.close()
           console.log(err)
           this.$toast('客户端请求出错')
         })
@@ -174,6 +175,7 @@ export default {
           }
         })
         .catch(err => {
+          this.$indicator.close()
           console.log(err)
           this.$toast('客户端请求出错')
         })
@@ -202,12 +204,16 @@ export default {
           localStorage.yjjjCaseLikedIdArray = JSON.stringify(this.yjjjCaseLikedIdArray)
         })
         .catch(err => {
+          this.$indicator.close()
           console.log(err)
           this.$toast('客户端请求出错')
         })
     },
     goDetail (id) {
       window.location.href = '/detail.html?id=' + id
+    },
+    goTeam () {
+      window.location.href = '/team.html'
     },
     loadBottom () {
       if (!this.loadmore) {
@@ -236,7 +242,7 @@ body {
   height: 100%;
   left: 0;
   top: 0;
-  // background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, .5);
 }
 header {
   display: flex;

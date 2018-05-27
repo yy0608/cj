@@ -1,24 +1,25 @@
 <template>
 <div class="page-item">
-  <rich-content :content="content"></rich-content>
+  <rich-content :richContent="richContent"></rich-content>
 </div>
 </template>
 
 <script>
 import axios from 'axios'
-import { origin } from '@/config'
+import { origin, staticOrigin } from '@/config'
 import RichContent from '@/components/RichContent.vue'
 
 export default {
   data () {
     return {
-      content: null
+      richContent: ''
     }
   },
   components: {
     RichContent
   },
   created () {
+    this.$indicator.open({ spinnerType: 'fading-circle' })
     axios({
       url: origin + '/cjjjapi/wx/getBizArticleShareById.action',
       method: 'post',
@@ -28,11 +29,37 @@ export default {
         if (res.data.code) {
           this.$toast(res.data.msg)
         }
-        console.log(res.data)
-        this.content = res.data.data
+        if (!res.data.data.contentUrl) {
+          this.$indicator.close()
+          return this.$messageBox({
+            title: '提示',
+            message: '请先在后台编辑公司简介'
+          })
+        }
+        axios({
+          url: staticOrigin + res.data.data.contentUrl,
+          method: 'get'
+        })
+          .then(res => {
+            this.$indicator.close()
+            // if (res.data.code) {
+            //   return this.$toast(res.data.msg)
+            // }
+
+            res.data = res.data.replace(/src="\/cjjjapi\/pics\//ig, 'src="' + origin + '/cjjjapi/pics/')
+
+            this.richContent = res.data
+          })
+          .catch(err => {
+            this.$indicator.close()
+            console.log(err)
+            this.$toast('客户端请求出错')
+          })
       })
       .catch(err => {
+        this.$indicator.close()
         console.log(err)
+        this.$toast('客户端请求出错')
       })
   }
 }

@@ -1,46 +1,41 @@
 <template>
 <div class="page-item">
   <rich-content :richContent="richContent"></rich-content>
-  <order-btn></order-btn>
 </div>
 </template>
 
 <script>
 import axios from 'axios'
 import { origin, staticOrigin } from '@/config'
-import { getQueryString } from '@/utils'
 import RichContent from '@/components/RichContent.vue'
-import OrderBtn from '@/components/OrderBtn.vue'
 
 export default {
   data () {
     return {
-      id: getQueryString('id'),
       richContent: ''
     }
   },
   components: {
-    RichContent,
-    OrderBtn
+    RichContent
   },
   created () {
-    if (!this.id) {
-      return this.$messageBox({
-        title: '提示',
-        message: '地址栏缺少id参数'
-      })
-    }
     this.$indicator.open({ spinnerType: 'fading-circle' })
     axios({
-      url: origin + '/cjjjapi/wx/getBizHouseBeautifyById.action',
+      url: origin + '/cjjjapi/wx/getBizArticleShareById.action',
       method: 'post',
-      data: { id: this.id }
+      data: { id: 'chanpinjieshao' }
     })
       .then(res => {
         if (res.data.code) {
-          return this.$toast(res.data.msg)
+          this.$toast(res.data.msg)
         }
-
+        if (!res.data.data.contentUrl) {
+          this.$indicator.close()
+          return this.$messageBox({
+            title: '提示',
+            message: '请先在后台编辑产品介绍'
+          })
+        }
         axios({
           url: staticOrigin + res.data.data.contentUrl,
           method: 'get'

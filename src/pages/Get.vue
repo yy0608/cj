@@ -51,7 +51,7 @@ html, body {
   width: 5.98rem;
   height: 6.58rem;
   background: url('../assets/imgs/get_block.png') no-repeat center center;
-  background-size: 100% center;
+  background-size: 100% auto;
 }
 .money-cont {
   display: flex;
@@ -86,6 +86,7 @@ html, body {
       width: 2rem;
       height: 100%;
       background: url('../assets/imgs/dots.png') no-repeat left center;
+      background-size: .22rem auto;
     }
     &:after {
       content: '';
@@ -94,6 +95,7 @@ html, body {
       width: 2rem;
       height: 100%;
       background: url('../assets/imgs/dots.png') no-repeat right center;
+      background-size: .22rem auto;
     }
   }
   ul {
