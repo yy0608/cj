@@ -1,14 +1,16 @@
 <template>
 <div class="page-item">
   <rich-content :richContent="richContent"></rich-content>
+  <order-btn></order-btn>
 </div>
 </template>
 
 <script>
 import axios from 'axios'
-import { origin } from '@/config'
+import { origin, staticOrigin } from '@/config'
 import { getQueryString } from '@/utils'
 import RichContent from '@/components/RichContent.vue'
+import OrderBtn from '@/components/OrderBtn.vue'
 
 export default {
   data () {
@@ -18,7 +20,8 @@ export default {
     }
   },
   components: {
-    RichContent
+    RichContent,
+    OrderBtn
   },
   created () {
     if (!this.id) {
@@ -27,6 +30,7 @@ export default {
         message: '地址栏缺少id参数'
       })
     }
+    this.$indicator.open({ spinnerType: 'fading-circle' })
     axios({
       url: origin + '/cjjjapi/wx/getBizHouseBeautifyById.action',
       method: 'post',
@@ -37,17 +41,17 @@ export default {
           return this.$toast(res.data.msg)
         }
 
-        console.log(res.data.data.contentUrl)
         axios({
-          url: origin + '/cjjjapi' + res.data.data.contentUrl,
+          url: staticOrigin + res.data.data.contentUrl,
           method: 'get'
         })
           .then(res => {
+            this.$indicator.close()
             // if (res.data.code) {
             //   return this.$toast(res.data.msg)
             // }
 
-            res.data = res.data.replace('src="/cjjjapi/pics/', 'src="' + origin + '/cjjjapi/pics/')
+            res.data = res.data.replace(/src="\/cjjjapi\/pics\//ig, 'src="' + origin + '/cjjjapi/pics/')
 
             this.richContent = res.data
           })

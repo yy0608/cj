@@ -1,7 +1,7 @@
 <template>
 <div class="page-item">
   <div class="my-slider">
-    <slider ref="slider" :pages="pages" :sliderinit="sliderinit" @slide='slide' @tap='onTap' @init='onInit'>
+    <slider ref="slider" :pages="sliderPages" :sliderinit="sliderinit" @slide='slide' @tap='onTap' @init='onInit'>
       <!-- 设置loading,可自定义 -->
       <div slot="loading">loading...</div>
     </slider>
@@ -14,51 +14,38 @@
     <div class="form-cont">
       <div class="form-item">
         <div class="label">姓名</div>
-        <input type="text">
+        <input type="text" v-model="form.name">
       </div>
       <div class="form-item">
         <div class="label">电话</div>
-        <input type="text">
+        <input type="text" v-model="form.phone">
       </div>
       <div class="form-item">
         <div class="label">城市</div>
-        <input type="text">
+        <input type="text" v-model="form.city">
       </div>
       <div class="form-item">
         <div class="label">楼盘</div>
-        <input type="text">
+        <input type="text" v-model="form.building">
       </div>
-      <div class="tc order-btn">点击预约</div>
-      <div class="tc custom-btn">定制须知</div>
+      <div class="tc order-btn" @click="order">点击预约</div>
+      <div class="tc custom-btn" @click="goCustom">定制须知</div>
     </div>
   </div>
 </div>
 </template>
 
 <script>
+import axios from 'axios'
+import { origin, staticOrigin } from '@/config'
 import slider from 'vue-concise-slider'
 
 export default {
   data () {
     return {
-      pages: [{
-        // html: '<div class="slider1">slider1</div>',
-        style: {
-          'background': 'url(' + require('../assets/imgs/tmp/1.jpg') + ')'
-        }
-      },
-      {
-        // html: '<div class="slider2">slider2</div>',
-        style: {
-          'background': 'url(' + require('../assets/imgs/tmp/1.jpg') + ')'
-        }
-      },
-      {
-        // html: '<div class="slider3">slider3</div>',
-        style: {
-          'background': 'url(' + require('../assets/imgs/tmp/1.jpg') + ')'
-        }
-      }],
+      origin,
+      staticOrigin,
+      sliderPages: [],
       sliderinit: {
         // currentPage: 0,
         // thresholdDistance: 500,
@@ -70,16 +57,101 @@ export default {
         // slidesToScroll: 1,
         // timingFunction: 'ease',
         duration: 300
+      },
+      form: {
+        name: '',
+        phone: '',
+        city: '',
+        building: ''
       }
     }
   },
   components: {
     slider
   },
+  created () {
+    this.$indicator.open({ spinnerType: 'fading-circle' })
+    axios({
+      url: origin + '/cjjjapi/wx/findBizMultiPicss.action',
+      method: 'post',
+      data: {
+        pageNo: this.pageNo,
+        pageSize: this.pageSize
+      }
+    })
+      .then(res => {
+        this.$indicator.close()
+        if (res.data.code) {
+          return this.$toast(res.data.msg)
+        }
+        if (!res.data.data.length) {
+          return this.$messageBox({
+            title: '没有活动',
+            message: '请在后台添加活动'
+          })
+        }
+        let sliderImgs = []
+        try {
+          sliderImgs = JSON.parse(res.data.data[0].detailPicList)
+        } catch (e) {
+          sliderImgs = []
+        }
+        for (let item of sliderImgs) {
+          let obj = {}
+          obj.style = {
+            background: 'url(' + staticOrigin + item + ') no-repeat center center',
+            'background-size': 'cover'
+          }
+          this.sliderPages.push(obj)
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        this.$toast('客户端请求出错')
+      })
+  },
   methods: {
     slide () {},
     onTap () {},
-    onInit () {}
+    onInit () {},
+    order () {
+      if (!this.form.name.trim()) {
+        return this.$toast('请填写姓名')
+      }
+      if (!this.form.phone.trim()) {
+        return this.$toast('请填写电话')
+      }
+      if (!this.form.city.trim()) {
+        return this.$toast('请填写城市')
+      }
+      let data = {
+        creatorName: this.form.name,
+        phone: this.form.phone,
+        cityBuilding: this.form.city + this.form.building
+      }
+      axios({
+        url: origin + '/cjjjapi/wx/saveBizBookingUser.action',
+        method: 'post',
+        data
+      })
+        .then(res => {
+          if (res.data.code) {
+            return this.$toast(res.data.msg)
+          }
+
+          this.$toast('预约成功')
+          setTimeout(() => {
+            window.location.href = '/get.html'
+          }, 1000)
+        })
+        .catch(err => {
+          console.log(err)
+          this.$toast('客户端请求出错')
+        })
+    },
+    goCustom () {
+      window.location.href = '/custom.html'
+    }
   }
 }
 </script>
@@ -88,6 +160,9 @@ export default {
 @import '../assets/css/reset.scss';
 @import '../assets/css/common.scss';
 
+body {
+  background-color: #22504d;
+}
 .my-slider {
   position: relative;
   height: 5rem;
@@ -104,16 +179,15 @@ export default {
   }
 }
 .order-cont {
-  padding: 0 .3rem;
-  background-color: #22504d;
+  padding: .3rem;
   .cash {
     width: 4.9rem;
     height: .38rem;
   }
   .form-cont {
-    margin-top: .2rem;
+    margin-top: .4rem;
     padding: .3rem 1rem;
-    background-color: #fff;
+    background-color: #fffdeb;
   }
   .form-item {
     display: flex;
@@ -137,10 +211,11 @@ export default {
       padding-left: .3rem;
       flex-grow: 1;
       border-style: none;
+      background-color: transparent;
     }
   }
   .order-btn {
-    margin: .3rem 0;
+    margin: .4rem 0;
     width: 4.86rem;
     height: .96rem;
     line-height: .96rem;
@@ -148,6 +223,10 @@ export default {
     font-size: .32rem;
     background: url('../assets/imgs/order-btn.png') no-repeat center center;
     background-size: 100% auto;
+    // box-shadow: 0 0 0 .2rem rgba(94, 57, 38, .2);
+  }
+  .custom-btn {
+    color: #5e3926;
   }
 }
 </style>

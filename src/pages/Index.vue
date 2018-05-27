@@ -23,7 +23,7 @@
     <div class="list-cont" v-if="caseList.length">
       <div class="list-item" v-for="(item, index) in caseList" :key="item.id" @click="goDetail(item.id)">
         <div class="img-cont">
-          <img :src="origin + '/cjjjapi' + item.mainPicPath">
+          <img :src="staticOrigin + item.mainPicPath">
         </div>
         <div class="title">{{item.cityName}}/{{item.areaName}}/精装</div>
         <div class="info-cont">
@@ -45,7 +45,7 @@
 
 <script>
 import axios from 'axios'
-import { origin } from '@/config'
+import { origin, staticOrigin } from '@/config'
 import OrderBtn from '@/components/OrderBtn.vue'
 
 export default {
@@ -59,6 +59,7 @@ export default {
       allLoaded: false,
       yjjjCaseLikedIdArray: [],
       origin,
+      staticOrigin,
       caseList: [],
       typeStyle: { 'max-height': 0 }
     }
