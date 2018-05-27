@@ -46,7 +46,7 @@ export default {
             //   return this.$toast(res.data.msg)
             // }
 
-            res.data = res.data.replace(/src="\/cjjjapi\/pics\//ig, 'src="' + origin + '/cjjjapi/pics/')
+            res.data = res.data.replace(/src="\/cjjjmnt\/ueditor/ig, 'src="' + origin + '/cjjjmnt/ueditor')
 
             this.richContent = res.data
           })

@@ -293,7 +293,7 @@ header {
 }
 
 .list-cont {
-  padding: .2rem;
+  padding: .2rem .2rem 1.2rem .2rem;
   .list-item {
     position: relative;
     margin-bottom: .4rem;
