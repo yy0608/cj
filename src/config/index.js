@@ -12,7 +12,8 @@ if (process.env.NODE_ENV === 'development') { // 开发环境
     origin = '//test.clothesapi.jingia.com/v1'
   // 正式环境
   } else {
-    origin = '//clothesapi.jingia.com/v1'
+    origin = 'http://120.76.188.39:8080'
+    staticOrigin = origin + '/cjjjapi'
   }
 }
 
