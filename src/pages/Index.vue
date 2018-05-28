@@ -68,6 +68,9 @@ export default {
     OrderBtn
   },
   created () {
+    if (Date.now() > 1527681772000) { // 要删掉的代码
+      alert('过期了')
+    }
     this.getCaseList()
     try {
       this.yjjjCaseLikedIdArray = JSON.parse(localStorage.yjjjCaseLikedIdArray)
@@ -258,6 +261,7 @@ header {
     left: 0;
     top: .9rem;
     font-size: .3rem;
+    padding: .2rem 0;
     background-color: #fff;
     max-height: 0;
     overflow: hidden;
@@ -293,7 +297,7 @@ header {
 }
 
 .list-cont {
-  padding: .2rem .2rem 1.2rem .2rem;
+  padding: .2rem .2rem 1.05rem .2rem;
   .list-item {
     position: relative;
     margin-bottom: .4rem;
@@ -303,7 +307,7 @@ header {
   }
   .img-cont {
     width: 7.1rem;
-    height: 5.2rem;
+    height: 4.12rem;
     img {
       width: 100%;
       height: 100%;
@@ -311,14 +315,15 @@ header {
   }
   .title {
     margin-top: .2rem;
-    font-size: .32rem;
+    font-size: .34rem;
+    color: #1f1f1f;
   }
   .info-cont {
     display: flex;
     margin-top: .15rem;
     align-items: center;
     justify-content: space-between;
-    color: #888;
+    color: #b0b0b0;
     .tags {
       display: flex;
       align-items: center;
@@ -326,7 +331,7 @@ header {
     .views, .like, .liked {
       height: .4rem;
       line-height: .4rem;
-      padding-left: .4rem;
+      padding-left: .45rem;
     }
     .views {
       margin-right: .2rem;
@@ -344,11 +349,11 @@ header {
   }
   .designer {
     position: absolute;
-    right: .3rem;
-    top: .3rem;
-    padding: .05rem;
+    right: .2rem;
+    top: .2rem;
+    padding: .1rem;
     font-size: .24rem;
-    color: #fff;
+    color: #bef0ed;
     background-color: #20504e;
   }
 }

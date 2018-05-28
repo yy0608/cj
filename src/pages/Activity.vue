@@ -1,6 +1,6 @@
 <template>
 <div class="page-item">
-  <div class="my-slider">
+  <div class="my-slider" @touchmove="handleTouch($event)">
     <slider ref="slider" :pages="sliderPages" :sliderinit="sliderinit">
       <!-- 设置loading,可自定义 -->
       <div slot="loading">loading...</div>
@@ -100,7 +100,7 @@ export default {
           let obj = {}
           obj.style = {
             background: 'url(' + staticOrigin + item + ') no-repeat center center',
-            'background-size': 'cover'
+            'background-size': '100% 100% !important'
           }
           this.sliderPages.push(obj)
         }
@@ -152,6 +152,9 @@ export default {
     },
     goCustom () {
       window.location.href = '/custom.html'
+    },
+    handleTouch (e) {
+      e.preventDefault()
     }
   }
 }

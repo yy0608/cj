@@ -10,15 +10,16 @@ export default {
 
 <style lang="scss">
 .rich-content {
-  padding: .3rem;
+  padding: 0 .3rem;
   img {
     width: 100%;
     display: block;
-    margin: 0 auto .2rem 0;
+    margin: .2rem 0;
     max-width: 100%;
   }
   p {
     line-height: .45rem;
+    margin: .2rem 0;
     text-align: justify;
   }
 }

@@ -79,7 +79,7 @@ export default {
   .title {
     padding-left: .1rem;
     margin: .2rem 0;
-    font-size: .3rem;
+    font-size: .32rem;
   }
   .team-item {
     position: relative;
@@ -98,8 +98,8 @@ export default {
     }
     .avatar {
       flex-shrink: 0;
-      width: 1rem;
-      height: 1rem;
+      width: 1.2rem;
+      height: 1.2rem;
       img {
         width: 100%;
         height: 100%;
@@ -108,12 +108,15 @@ export default {
     }
     .text-cont {
       flex-grow: 1;
-      margin-left: .4rem;
+      margin-left: .2rem;
     }
     .title-cont {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      .name {
+        font-size: .3rem;
+      }
       .wechat {
         padding: .1rem .2rem;
         font-size: .24rem;
@@ -122,7 +125,7 @@ export default {
       }
     }
     .intro {
-      margin-top: .2rem;
+      margin-top: .15rem;
       color: #666;
     }
   }

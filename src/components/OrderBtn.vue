@@ -17,8 +17,9 @@ export default {
   position: fixed;
   right: .3rem;
   bottom: .3rem;
-  padding: .2rem .2rem .2rem .6rem;
-  background: rgba(198, 164, 53, .5) url('../assets/imgs/clock.png') no-repeat .2rem center;
-  background-size: .3rem auto;
+  padding: .2rem .2rem .2rem .65rem;
+  font-size: .32rem;
+  background: #fde97c url('../assets/imgs/clock.png') no-repeat .2rem center;
+  background-size: .35rem auto;
 }
 </style>
