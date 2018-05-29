@@ -3,7 +3,7 @@
   <div class="tc logo-cont">
     <img class="logo" src="../assets/imgs/get_logo.png">
   </div>
-  <div class="get-block">
+  <div class="get-block" @click="get">
     <div class="money-cont">
       <div class="symbol">&yen;</div>
       <div class="number">200</div>
@@ -25,7 +25,31 @@
 </template>
 
 <script>
-export default {}
+import axios from 'axios'
+import { origin } from '@/config'
+
+export default {
+  methods: {
+    get () {
+      axios({
+        url: origin + '/cjjjapi/wx/saveBizBookingUser.action',
+        method: 'post',
+        data: {}
+      })
+        .then(res => {
+          this.$indicator.close()
+          if (res.data.code) {
+            return this.$toast(res.data.msg)
+          }
+        })
+        .then(err => {
+          this.$indicator.close()
+          console.log(err)
+          this.$toast('客户端请求出错')
+        })
+    }
+  }
+}
 </script>
 
 <style lang="scss">
