@@ -141,7 +141,7 @@ export default {
 
           this.$toast('预约成功')
           setTimeout(() => {
-            window.location.href = '/get.html'
+            window.location.href = './get.html'
           }, 1000)
         })
         .catch(err => {
@@ -151,7 +151,7 @@ export default {
         })
     },
     goCustom () {
-      window.location.href = '/custom.html'
+      window.location.href = './custom.html'
     },
     handleTouch (e) {
       e.preventDefault()

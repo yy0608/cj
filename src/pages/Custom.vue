@@ -78,7 +78,7 @@ export default {
       this.showOrder = data.currentPage === this.sliderPages.length - 1
     },
     goOrder () {
-      window.location.href = '/activity.html'
+      window.location.href = './activity.html'
     }
   }
 }

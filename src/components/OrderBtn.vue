@@ -6,7 +6,7 @@
 export default {
   methods: {
     goOrder () {
-      window.location.href = '/activity.html'
+      window.location.href = './activity.html'
     }
   }
 }

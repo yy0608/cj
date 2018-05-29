@@ -213,10 +213,10 @@ export default {
         })
     },
     goDetail (id) {
-      window.location.href = '/detail.html?id=' + id
+      window.location.href = './detail.html?id=' + id
     },
     goTeam () {
-      window.location.href = '/team.html'
+      window.location.href = './team.html'
     },
     loadBottom () {
       if (!this.loadmore) {
