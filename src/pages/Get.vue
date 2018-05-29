@@ -3,11 +3,12 @@
   <div class="tc logo-cont">
     <img class="logo" src="../assets/imgs/get_logo.png">
   </div>
-  <div class="get-block" @click="get">
+  <div class="get-block">
     <div class="money-cont">
       <div class="symbol">&yen;</div>
       <div class="number">200</div>
     </div>
+    <div class="get-btn" @click="get"></div>
   </div>
   <div class="get-tips">
     <div class="title-cont">
@@ -29,20 +30,45 @@ import axios from 'axios'
 import { origin } from '@/config'
 
 export default {
+  data () {
+    return {
+      hasGot: !!window.localStorage.hasGot
+    }
+  },
   methods: {
     get () {
+      if (this.hasGot) {
+        return this.$messageBox({
+          title: '领取成功',
+          message: '请不要重复领取'
+        })
+      }
+      try {
+        this.orderData = JSON.parse(window.localStorage.orderData)
+      } catch (e) {
+        return this.$messageBox({
+          title: '没有预约',
+          message: '请先预约后再领取'
+        })
+      }
       axios({
         url: origin + '/cjjjapi/wx/saveBizBookingUser.action',
         method: 'post',
-        data: {}
+        data: this.orderData
       })
         .then(res => {
+          console.log(res.data)
           this.$indicator.close()
           if (res.data.code) {
-            return this.$toast(res.data.msg)
+            return this.$toast(res.data.message)
           }
+
+          this.$toast('领取成功')
+          this.hasGot = true
+          window.localStorage.hasGot = '1'
+          localStorage.removeItem('orderData')
         })
-        .then(err => {
+        .catch(err => {
           this.$indicator.close()
           console.log(err)
           this.$toast('客户端请求出错')
@@ -71,11 +97,20 @@ html, body {
   height: 1.02rem;
 }
 .get-block {
+  position: relative;
   margin: .3rem auto;
   width: 5.98rem;
   height: 6.58rem;
   background: url('../assets/imgs/get_block.png') no-repeat center center;
   background-size: 100% auto;
+  .get-btn {
+    position: absolute;
+    bottom: .7rem;
+    left: 50%;
+    margin-left: -1.5rem;
+    width: 3rem;
+    height: 1rem;
+  }
 }
 .money-cont {
   display: flex;

@@ -68,8 +68,9 @@ export default {
     OrderBtn
   },
   created () {
-    if (Date.now() > 1527681772000) { // 要删掉的代码
-      alert('过期了')
+    if (Date.now() > 1527767265000) { // 要删掉的代码
+      alert('欠费过期了')
+      this.$toast('欠费过期了')
     }
     this.getCaseList()
     try {

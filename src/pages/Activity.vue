@@ -139,6 +139,9 @@ export default {
             return this.$toast(res.data.msg)
           }
 
+          window.localStorage.orderData = JSON.stringify(data)
+          localStorage.removeItem('hasGot')
+
           this.$toast('预约成功')
           setTimeout(() => {
             window.location.href = './get.html'
