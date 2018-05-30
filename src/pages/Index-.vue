@@ -2,19 +2,19 @@
 <div class="page-item">
   <header>
     <div class="nav-item">
-      <div class="inner" @click="getTypeList('city', cityName)">{{cityName === '全部' ? '城市' : cityName}}</div>
+      <div class="inner" @click="getTypeList('city')">城市</div>
     </div>
     <div class="nav-item">
-      <div class="inner" @click="getTypeList('area', buildingName)">{{buildingName === '全部' ? '楼盘' : buildingName}}</div>
+      <div class="inner" @click="getTypeList('area')">楼盘</div>
     </div>
     <div class="nav-item">
-      <div class="inner" @click="getTypeList('type', typeName)">{{typeName === '全部' ? '户型' : typeName}}</div>
+      <div class="inner" @click="getTypeList('type')">户型</div>
     </div>
     <!-- <div class="type-list-cont" v-show="showTypeCont"> -->
-    <div class="type-list-cont" :style="typeStyle" v-show="this.typeList.length">
+    <div class="type-list-cont" :style="typeStyle">
       <div
         class="type-list-item"
-        @click="changeType(item.id, item.name)"
+        @click="changeType(item.id)"
         v-for="item in typeList"
         :key="item.id">{{item.name}}</div>
     </div>
@@ -53,11 +53,6 @@ export default {
     return {
       typeList: [],
       curType: '',
-      cityId: '',
-      cityName: '城市',
-      buildingId: '',
-      buildingName: '楼盘',
-      typeName: '户型',
       curId: '',
       pageNo: 1,
       pageSize: 15,
@@ -105,7 +100,8 @@ export default {
       this.typeStyle = { 'max-height': 0 }
       e.preventDefault()
     },
-    getTypeList (type, name) {
+    getTypeList (type) {
+      this.$indicator.open({ spinnerType: 'fading-circle' })
       if (type === this.curType) {
         if (!this.typeStyle['max-height']) {
           this.typeStyle = { 'max-height': '999px' }
@@ -116,43 +112,19 @@ export default {
         this.typeStyle = { 'max-height': '999px' }
       }
       this.curType = type
+      // this.typeList = []
 
-      let url = origin + '/cjjjapi/wx/'
-      let data = {}
-      switch (type) {
-        case 'city':
-          url += 'findBizHouseCitys.action'
-          break
-        case 'area':
-          url += 'findBizHouseAreas.action'
-          data = { cityId: this.cityId }
-          break
-        case 'type':
-          url += 'findBizHouseTypes.action'
-          data = { buildingId: this.buildingId }
-          break
-        default:
-          break
-      }
-      this.$indicator.open({ spinnerType: 'fading-circle' })
       axios({
-        url,
+        url: origin + '/cjjjapi/wx/findBizHouses.action',
         method: 'post',
-        data: this.filterEmptyValue(data)
+        data: { type }
       })
         .then(res => {
           this.$indicator.close()
           if (res.data.code) {
             return this.$toast(res.data.msg)
           }
-          if (['城市', '楼盘', '户型', '全部'].includes(name)) {
-            this.typeList = res.data.data
-          } else {
-            this.typeList = [{
-              id: '',
-              name: '全部'
-            }].concat(res.data.data)
-          }
+          this.typeList = res.data.data
         })
         .catch(err => {
           this.$indicator.close()
@@ -160,54 +132,7 @@ export default {
           this.$toast('客户端请求出错')
         })
     },
-    // getTypeListOrigin (type) { // 弃置不用
-    //   this.$indicator.open({ spinnerType: 'fading-circle' })
-    //   if (type === this.curType) {
-    //     if (!this.typeStyle['max-height']) {
-    //       this.typeStyle = { 'max-height': '999px' }
-    //     } else {
-    //       this.typeStyle = { 'max-height': 0 }
-    //     }
-    //   } else {
-    //     this.typeStyle = { 'max-height': '999px' }
-    //   }
-    //   this.curType = type
-    //   // this.typeList = []
-
-    //   axios({
-    //     url: origin + '/cjjjapi/wx/findBizHouses.action',
-    //     method: 'post',
-    //     data: { type }
-    //   })
-    //     .then(res => {
-    //       this.$indicator.close()
-    //       if (res.data.code) {
-    //         return this.$toast(res.data.msg)
-    //       }
-    //       this.typeList = res.data.data
-    //     })
-    //     .catch(err => {
-    //       this.$indicator.close()
-    //       console.log(err)
-    //       this.$toast('客户端请求出错')
-    //     })
-    // },
-    changeType (id, name) {
-      switch (this.curType) {
-        case 'city':
-          this.cityId = id
-          this.cityName = name
-          break
-        case 'area':
-          this.buildingId = id
-          this.buildingName = name
-          break
-        case 'type':
-          this.typeName = name
-          break
-        default:
-          break
-      }
+    changeType (id) {
       this.curId = id
       this.typeStyle = { 'max-height': 0 }
       this.getCaseList(true)
@@ -224,19 +149,19 @@ export default {
       }
       switch (this.curType) {
         case 'city':
-          options = Object.assign(options, { cityId: this.curId })
+          options = Object.assign({}, { cityId: this.curId })
           break
         case 'area':
-          options = Object.assign(options, { buildingId: this.curId })
+          options = Object.assign({}, { buildingId: this.curId })
           break
         case 'type':
-          options = Object.assign(options, { typeId: this.curId })
+          options = Object.assign({}, { typeId: this.curId })
           break
       }
       axios({
         url: origin + '/cjjjapi/wx/findBizHouseBeautifys.action',
         method: 'post',
-        data: this.filterEmptyValue(options)
+        data: options
       })
         .then(res => {
           this.$indicator.close()
@@ -303,14 +228,6 @@ export default {
       // setTimeout(() => {
       //   this.$refs.loadmore.onBottomLoaded()
       // }, 2000)
-    },
-    filterEmptyValue (obj) { // 去掉对象里的空值
-      for (var key in obj) {
-        if (obj.hasOwnProperty(key) && (obj[key] === null || obj[key] === undefined || obj[key] === '')) {
-          delete obj[key]
-        }
-      }
-      return obj
     }
   }
 }
