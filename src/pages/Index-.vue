@@ -122,7 +122,7 @@ export default {
         .then(res => {
           this.$indicator.close()
           if (res.data.code) {
-            return this.$toast(res.data.msg)
+            return this.$toast(res.data.message)
           }
           this.typeList = res.data.data
         })
@@ -167,7 +167,7 @@ export default {
           this.$indicator.close()
           this.$refs.loadmore.onBottomLoaded()
           if (res.data.code) {
-            return this.$toast(res.data.msg)
+            return this.$toast(res.data.message)
           }
           if (res.data.page.pages === this.pageNo) {
             this.allLoaded = true
@@ -200,7 +200,7 @@ export default {
       })
         .then(res => {
           if (res.data.code) {
-            return this.$toast(res.data.msg)
+            return this.$toast(res.data.message)
           }
           this.$set(this.caseList[index], 'liked', true)
           this.caseList[index].favoriteCount++

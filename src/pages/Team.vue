@@ -50,7 +50,7 @@ export default {
       .then(res => {
         this.$indicator.close()
         if (res.data.code) {
-          return this.$toast(res.data.msg)
+          return this.$toast(res.data.message)
         }
         console.log(res.data)
         this.teamList = res.data.data

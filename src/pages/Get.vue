@@ -52,7 +52,7 @@ export default {
         })
       }
       axios({
-        url: origin + '/cjjjapi/wx/saveBizBookingUser.action',
+        url: origin + '/cjjjapi/wx/saveCouponInfo.action',
         method: 'post',
         data: this.orderData
       })

@@ -27,7 +27,7 @@ export default {
     })
       .then(res => {
         if (res.data.code) {
-          this.$toast(res.data.msg)
+          this.$toast(res.data.message)
         }
         if (!res.data.data.contentUrl) {
           this.$indicator.close()
@@ -37,13 +37,13 @@ export default {
           })
         }
         axios({
-          url: staticOrigin + res.data.data.contentUrl,
+          url: staticOrigin + res.data.data.contentUrl + '?t=' + Date.now(),
           method: 'get'
         })
           .then(res => {
             this.$indicator.close()
             // if (res.data.code) {
-            //   return this.$toast(res.data.msg)
+            //   return this.$toast(res.data.message)
             // }
 
             res.data = res.data.replace(/src="\/cjjjmnt\/ueditor/ig, 'src="' + origin + '/cjjjmnt/ueditor')

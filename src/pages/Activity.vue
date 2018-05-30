@@ -82,7 +82,7 @@ export default {
       .then(res => {
         this.$indicator.close()
         if (res.data.code) {
-          return this.$toast(res.data.msg)
+          return this.$toast(res.data.message)
         }
         if (!res.data.data.length) {
           return this.$messageBox({
@@ -136,7 +136,7 @@ export default {
         .then(res => {
           this.$indicator.close()
           if (res.data.code) {
-            return this.$toast(res.data.msg)
+            return this.$toast(res.data.message)
           }
 
           window.localStorage.orderData = JSON.stringify(data)

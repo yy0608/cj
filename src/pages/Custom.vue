@@ -47,7 +47,7 @@ export default {
       .then(res => {
         this.$indicator.close()
         if (res.data.code) {
-          return this.$toast(res.data.msg)
+          return this.$toast(res.data.message)
         }
         let sliderImgs = []
         try {

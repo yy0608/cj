@@ -38,17 +38,17 @@ export default {
     })
       .then(res => {
         if (res.data.code) {
-          return this.$toast(res.data.msg)
+          return this.$toast(res.data.message)
         }
 
         axios({
-          url: staticOrigin + res.data.data.contentUrl,
+          url: staticOrigin + res.data.data.contentUrl + '?t=' + Date.now(),
           method: 'get'
         })
           .then(res => {
             this.$indicator.close()
             // if (res.data.code) {
-            //   return this.$toast(res.data.msg)
+            //   return this.$toast(res.data.message)
             // }
 
             res.data = res.data.replace(/src="\/cjjjapi\/pics\//ig, 'src="' + origin + '/cjjjapi/pics/')
