@@ -40,7 +40,7 @@ export default {
   created () {
     this.$indicator.open({ spinnerType: 'fading-circle' })
     axios({
-      url: origin + '/cjjjapi/wx/findBizMultiPicss.action',
+      url: origin + '/cjjjapi/wx/getBizMultiPicsById.action',
       method: 'post',
       data: { id: 'flow' }
     })
@@ -51,7 +51,7 @@ export default {
         }
         let sliderImgs = []
         try {
-          sliderImgs = JSON.parse(res.data.data[0].detailPicList)
+          sliderImgs = JSON.parse(res.data.data.detailPicList)
         } catch (e) {
           sliderImgs = []
         }
