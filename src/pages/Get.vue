@@ -43,7 +43,6 @@ export default {
       data: { cfgId: 'couponMoney' }
     })
       .then(res => {
-        console.log(res.data)
         if (res.data.code) {
           return this.$toast(res.data.message)
         }
