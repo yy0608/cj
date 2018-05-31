@@ -6,7 +6,7 @@
   <div class="get-block">
     <div class="money-cont">
       <div class="symbol">&yen;</div>
-      <div class="number">200</div>
+      <div class="number">{{getMoney}}</div>
     </div>
     <div class="get-btn" @click="get"></div>
   </div>
@@ -32,8 +32,27 @@ import { origin } from '@/config'
 export default {
   data () {
     return {
-      hasGot: !!window.localStorage.hasGot
+      hasGot: !!window.localStorage.hasGot,
+      getMoney: ''
     }
+  },
+  created () {
+    axios({
+      url: origin + '/cjjjapi/wx/getBizConfig.action',
+      method: 'post',
+      data: { cfgId: 'couponMoney' }
+    })
+      .then(res => {
+        console.log(res.data)
+        if (res.data.code) {
+          return this.$toast(res.data.message)
+        }
+        this.getMoney = res.data.data.cfgValue
+      })
+      .catch(err => {
+        console.log(err)
+        this.$toast('客户端请求出错')
+      })
   },
   methods: {
     get () {
