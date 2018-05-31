@@ -25,7 +25,8 @@
         <div class="img-cont">
           <img :src="staticOrigin + item.mainPicPath">
         </div>
-        <div class="title">{{item.cityName}}/{{item.areaName}}/精装</div>
+        <!-- <div class="title">{{item.cityName}}/{{item.areaName}}/精装</div> -->
+        <div class="title">{{item.cityName}}/{{item.areaName}}</div>
         <div class="info-cont">
           <div class="desc">{{item.typeName}}/{{item.styleInfo}}</div>
           <div class="tags">
@@ -73,10 +74,6 @@ export default {
     OrderBtn
   },
   created () {
-    if (Date.now() > 1527767265000) { // 要删掉的代码
-      alert('欠费过期了')
-      this.$toast('欠费过期了')
-    }
     this.getCaseList()
     try {
       this.yjjjCaseLikedIdArray = JSON.parse(localStorage.yjjjCaseLikedIdArray)
@@ -391,10 +388,10 @@ header {
   }
   .img-cont {
     width: 7.1rem;
-    height: 4.12rem;
+    // height: 4.12rem;
     img {
       width: 100%;
-      height: 100%;
+      // height: 100%;
     }
   }
   .title {
