@@ -14,15 +14,15 @@
     <div class="form-cont">
       <div class="form-item">
         <div class="label">姓名</div>
-        <input type="text" v-model="form.name">
+        <input type="text" v-model="form.name" placeholder="必填">
       </div>
       <div class="form-item">
         <div class="label">电话</div>
-        <input type="text" v-model="form.phone">
+        <input type="text" v-model="form.phone" placeholder="必填">
       </div>
       <div class="form-item">
         <div class="label">城市</div>
-        <input type="text" v-model="form.city">
+        <input type="text" v-model="form.city" placeholder="必填">
       </div>
       <div class="form-item">
         <div class="label">楼盘</div>
@@ -234,6 +234,18 @@ body {
   }
   .custom-btn {
     color: #5e3926;
+  }
+  ::-webkit-input-placeholder {
+    color: #c7c7c7;
+  }
+  ::-moz-placeholder {
+    color: #c7c7c7;
+  }
+  input:-moz-placeholder {
+    color: #c7c7c7;
+  }
+  input:-ms-input-placeholder {
+    color: #c7c7c7;
   }
 }
 </style>
