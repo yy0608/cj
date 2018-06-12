@@ -41,8 +41,20 @@ export default {
           return this.$toast(res.data.message)
         }
 
+        let contentUrl = res.data.data.contentUrl
+
+        if (/^http/.test(contentUrl)) {
+          if (window.localStorage.needJump) {
+            window.location.href = contentUrl
+            window.localStorage.removeItem('needJump')
+          } else {
+            window.history.go(-1)
+          }
+          return
+        }
+
         axios({
-          url: staticOrigin + res.data.data.contentUrl + '?t=' + Date.now(),
+          url: staticOrigin + contentUrl + '?t=' + Date.now(),
           method: 'get'
         })
           .then(res => {

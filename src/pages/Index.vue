@@ -74,6 +74,7 @@ export default {
     OrderBtn
   },
   created () {
+    window.localStorage.needJump = '1'
     this.getCaseList()
     try {
       this.yjjjCaseLikedIdArray = JSON.parse(localStorage.yjjjCaseLikedIdArray)
