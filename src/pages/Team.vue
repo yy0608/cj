@@ -67,7 +67,7 @@ export default {
     },
     imgError (e) {
       this.$toast('图片加载失败')
-      e.currentTarget.src = 'http://placeholder.qiniudn.com/200x200/f5f5f5/888'
+      e.currentTarget.src = 'https://dn-placeholder.qbox.me/200x200/f5f5f5/888'
     }
   }
 }
