@@ -5,6 +5,12 @@ import App from './pages/Index.vue'
 
 import { Toast, Loadmore, Indicator } from 'mint-ui'
 
+import FastClick from 'fastclick'
+
+window.addEventListener('load', () => {
+  FastClick.attach(document.body)
+})
+
 Vue.component(Loadmore.name, Loadmore)
 Vue.prototype.$toast = Toast
 Vue.prototype.$indicator = Indicator

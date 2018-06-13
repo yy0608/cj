@@ -18,8 +18,8 @@
     </div>
   </div>
   <order-btn></order-btn>
-  <div class="qr-cont" v-show="showRrUrl" @click="showRrUrl = false">
-    <img @click.stop="" :src="qrUrl">
+  <div class="qr-cont" v-if="showRrUrl" @click="showRrUrl = false">
+    <img @click.stop="" :src="qrUrl" @error="imgError($event)">
   </div>
 </div>
 </template>
@@ -52,7 +52,6 @@ export default {
         if (res.data.code) {
           return this.$toast(res.data.message)
         }
-        console.log(res.data)
         this.teamList = res.data.data
       })
       .catch(err => {
@@ -65,6 +64,10 @@ export default {
     handleShowQrUrl (url) {
       this.showRrUrl = true
       this.qrUrl = url
+    },
+    imgError (e) {
+      this.$toast('图片加载失败')
+      e.currentTarget.src = 'http://placeholder.qiniudn.com/200x200/f5f5f5/888'
     }
   }
 }
@@ -140,5 +143,9 @@ export default {
   background-color: rgba(0, 0, 0, .75);
   align-items: center;
   justify-content: center;
+  & > img {
+    max-width: 80%;
+    max-height: 80%;
+  }
 }
 </style>

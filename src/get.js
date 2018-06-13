@@ -5,6 +5,12 @@ import App from './pages/Get.vue'
 
 import { Toast, Indicator, MessageBox } from 'mint-ui'
 
+import FastClick from 'fastclick'
+
+window.addEventListener('load', () => {
+  FastClick.attach(document.body)
+})
+
 Vue.prototype.$toast = Toast
 Vue.prototype.$indicator = Indicator
 Vue.prototype.$messageBox = MessageBox
