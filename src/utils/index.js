@@ -9,7 +9,7 @@ export const getQueryString = name => {
 }
 
 export const displayRealUrl = (prefix, url) => {
-  if (/^http/.test(url)) {
+  if (/^http((:\/\/)|(s:\/\/))/.test(url)) {
     return url
   } else {
     return prefix + url

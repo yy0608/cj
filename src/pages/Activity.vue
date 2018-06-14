@@ -179,12 +179,16 @@ body {
   height: 5rem;
   .banner-txt {
     position: absolute;
-    width: 5.22rem;
-    height: 3.1rem;
-    top: 50%;
-    left: 50%;
-    margin-left: -2.61rem;
-    margin-top: -1.55rem;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    // width: 5.22rem;
+    // height: 3.1rem;
+    // top: 50%;
+    // left: 50%;
+    // margin-left: -2.61rem;
+    // margin-top: -1.55rem;
     z-index: 10;
     pointer-events: none;
   }

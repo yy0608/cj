@@ -43,18 +43,19 @@ export default {
 
         let contentUrl = res.data.data.contentUrl
 
-        if (/^http/.test(contentUrl)) {
-          if (window.localStorage.needJump) {
-            window.location.href = contentUrl
-            window.localStorage.removeItem('needJump')
-          } else {
-            window.history.go(-1)
-          }
-          return
-        }
+        // if (/^http((:\/\/)|(s:\/\/))/.test(contentUrl)) {
+        //   if (window.localStorage.needJump) {
+        //     window.location.href = contentUrl
+        //     window.localStorage.removeItem('needJump')
+        //   } else {
+        //     window.history.go(-1)
+        //   }
+        //   return
+        // }
 
         axios({
           url: displayRealUrl(staticOrigin, contentUrl) + '?t=' + Date.now(),
+          // url: 'https://mp.weixin.qq.com/s/hi3nINCdSy6WOG3qNUFa9w',
           method: 'get'
         })
           .then(res => {
@@ -69,8 +70,14 @@ export default {
           })
           .catch(err => {
             this.$indicator.close()
+            if (window.localStorage.needJump) {
+              window.location.href = displayRealUrl(staticOrigin, contentUrl)
+              window.localStorage.removeItem('needJump')
+            } else {
+              window.history.go(-1)
+            }
             console.log(err)
-            this.$toast('客户端请求出错')
+            // this.$toast('客户端请求出错')
           })
       })
       .catch(err => {
