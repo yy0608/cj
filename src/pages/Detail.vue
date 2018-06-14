@@ -8,7 +8,7 @@
 <script>
 import axios from 'axios'
 import { origin, staticOrigin } from '@/config'
-import { getQueryString } from '@/utils'
+import { getQueryString, displayRealUrl } from '@/utils'
 import RichContent from '@/components/RichContent.vue'
 import OrderBtn from '@/components/OrderBtn.vue'
 
@@ -54,7 +54,7 @@ export default {
         }
 
         axios({
-          url: staticOrigin + contentUrl + '?t=' + Date.now(),
+          url: displayRealUrl(staticOrigin, contentUrl) + '?t=' + Date.now(),
           method: 'get'
         })
           .then(res => {

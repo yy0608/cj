@@ -5,7 +5,7 @@
       <!-- 设置loading,可自定义 -->
       <div slot="loading">loading...</div>
     </slider>
-    <img class="banner-txt" src="../assets/imgs/banner_txt.png">
+    <img class="banner-txt" v-if="bannerSrc" :src="displayRealUrl(staticOrigin, bannerSrc)">
   </div>
   <div class="order-cont">
     <div class="tc">
@@ -38,6 +38,7 @@
 <script>
 import axios from 'axios'
 import { origin, staticOrigin } from '@/config'
+import { displayRealUrl } from '@/utils'
 import slider from 'vue-concise-slider'
 
 export default {
@@ -45,6 +46,8 @@ export default {
     return {
       origin,
       staticOrigin,
+      bannerSrc: '',
+      displayRealUrl,
       sliderPages: [],
       sliderinit: {
         // currentPage: 0,
@@ -96,10 +99,11 @@ export default {
         } catch (e) {
           sliderImgs = []
         }
+        this.bannerSrc = res.data.data[0].mainPic
         for (let item of sliderImgs) {
           let obj = {}
           obj.style = {
-            background: 'url(' + staticOrigin + item + ') no-repeat center center',
+            background: 'url(' + displayRealUrl(staticOrigin, item) + ') no-repeat center center',
             'background-size': '100% 100% !important'
           }
           this.sliderPages.push(obj)

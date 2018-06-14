@@ -14,6 +14,7 @@
 import axios from 'axios'
 import { origin, staticOrigin } from '@/config'
 import slider from 'vue-concise-slider'
+import { displayRealUrl } from '@/utils'
 
 export default {
   data () {
@@ -58,7 +59,7 @@ export default {
         for (let item of sliderImgs) {
           let obj = {}
           obj.style = {
-            background: 'url(' + staticOrigin + item + ') no-repeat center center',
+            background: 'url(' + displayRealUrl(staticOrigin, item) + ') no-repeat center center',
             'background-size': '100% 100% !important'
           }
           this.sliderPages.push(obj)

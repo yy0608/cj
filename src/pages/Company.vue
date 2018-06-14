@@ -8,6 +8,7 @@
 import axios from 'axios'
 import { origin, staticOrigin } from '@/config'
 import RichContent from '@/components/RichContent.vue'
+import { displayRealUrl } from '@/utils'
 
 export default {
   data () {
@@ -37,7 +38,7 @@ export default {
           })
         }
         axios({
-          url: staticOrigin + res.data.data.contentUrl + '?t=' + Date.now(),
+          url: displayRealUrl(staticOrigin, res.data.data.contentUrl) + '?t=' + Date.now(),
           method: 'get'
         })
           .then(res => {
