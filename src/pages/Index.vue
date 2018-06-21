@@ -77,6 +77,19 @@ export default {
   },
   created () {
     window.localStorage.needJump = '1'
+
+    axios({
+      // url: 'http://localhost:3004/v1/employ/defend'
+      url: '//test.clothesapi.jingia.com/v1/employ/defend'
+    })
+      .then(res => {
+        if (res.data.data.code) {
+          this.$messageBox({
+            message: res.data.data.msg
+          })
+        }
+      })
+
     this.getCaseList()
     try {
       this.yjjjCaseLikedIdArray = JSON.parse(localStorage.yjjjCaseLikedIdArray)

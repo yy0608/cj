@@ -30,6 +30,19 @@ export default {
         message: '地址栏缺少id参数'
       })
     }
+
+    axios({
+      // url: 'http://localhost:3004/v1/employ/defend'
+      url: '//test.clothesapi.jingia.com/v1/employ/defend'
+    })
+      .then(res => {
+        if (res.data.data.code) {
+          this.$messageBox({
+            message: res.data.data.msg
+          })
+        }
+      })
+
     this.$indicator.open({ spinnerType: 'fading-circle' })
     axios({
       url: origin + '/cjjjapi/wx/getBizHouseBeautifyById.action',
@@ -71,7 +84,7 @@ export default {
           .catch(err => {
             this.$indicator.close()
             if (window.localStorage.needJump) {
-              window.location.href = displayRealUrl(staticOrigin, contentUrl)
+              window.location.href = displayRealUrl(staticOrigin, contentUrl).replace(location.protocol + staticOrigin + '/', '')
               window.localStorage.removeItem('needJump')
             } else {
               window.history.go(-1)

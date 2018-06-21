@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './pages/Index.vue'
 
-import { Toast, Loadmore, Indicator } from 'mint-ui'
+import { Toast, Loadmore, Indicator, MessageBox } from 'mint-ui'
 
 import FastClick from 'fastclick'
 
@@ -14,6 +14,7 @@ window.addEventListener('load', () => {
 Vue.component(Loadmore.name, Loadmore)
 Vue.prototype.$toast = Toast
 Vue.prototype.$indicator = Indicator
+Vue.prototype.$messageBox = MessageBox
 
 Vue.config.productionTip = false
 
