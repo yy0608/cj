@@ -38,12 +38,13 @@
 <script>
 import axios from 'axios'
 import { origin, staticOrigin } from '@/config'
-import { displayRealUrl } from '@/utils'
+import { getQueryString, displayRealUrl } from '@/utils'
 import slider from 'vue-concise-slider'
 
 export default {
   data () {
     return {
+      id: getQueryString('id'),
       origin,
       staticOrigin,
       bannerSrc: '',
@@ -75,9 +76,10 @@ export default {
   created () {
     this.$indicator.open({ spinnerType: 'fading-circle' })
     axios({
-      url: origin + '/cjjjapi/wx/findBizMultiPicss.action',
+      url: this.id ? origin + '/cjjjapi/wx/getBizMultiPicsById.action' : origin + '/cjjjapi/wx/findBizMultiPicss.action',
       method: 'post',
       data: {
+        id: this.id,
         pageNo: this.pageNo,
         pageSize: this.pageSize
       }
@@ -87,19 +89,19 @@ export default {
         if (res.data.code) {
           return this.$toast(res.data.message)
         }
-        if (!res.data.data.length) {
-          return this.$messageBox({
-            title: '没有活动',
-            message: '请在后台添加活动'
-          })
-        }
+        // if (!res.data.data.length) {
+        //   return this.$messageBox({
+        //     title: '没有活动',
+        //     message: '请在后台添加活动'
+        //   })
+        // }
         let sliderImgs = []
         try {
-          sliderImgs = JSON.parse(res.data.data[0].detailPicList)
+          sliderImgs = this.id ? JSON.parse(res.data.data.detailPicList) : JSON.parse(res.data.data[0].detailPicList)
         } catch (e) {
           sliderImgs = []
         }
-        this.bannerSrc = res.data.data[0].mainPic
+        this.bannerSrc = this.id ? res.data.data.mainPic : res.data.data[0].mainPic
         for (let item of sliderImgs) {
           let obj = {}
           obj.style = {
