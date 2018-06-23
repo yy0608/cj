@@ -26,7 +26,7 @@
           <img :src="displayRealUrl(staticOrigin, item.mainPicPath)">
         </div>
         <!-- <div class="title">{{item.cityName}}/{{item.areaName}}/精装</div> -->
-        <div class="title">{{item.cityName}}/{{item.areaName}}</div>
+        <div class="title">{{item.title}}</div>
         <div class="info-cont">
           <div class="desc">{{item.typeName}}/{{item.styleInfo}}</div>
           <div class="tags">
