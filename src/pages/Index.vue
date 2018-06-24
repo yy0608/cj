@@ -28,7 +28,7 @@
         <!-- <div class="title">{{item.cityName}}/{{item.areaName}}/精装</div> -->
         <div class="title">{{item.title}}</div>
         <div class="info-cont">
-          <div class="desc">{{item.typeName}}/{{item.styleInfo}}</div>
+          <div class="desc">{{item.typeName}}/{{item.size ? item.size + '/' : item.size}}{{item.styleInfo}}</div>
           <div class="tags">
             <div class="views">{{item.readCount}}</div>
             <div :class="[item.liked ? 'liked' : 'like', '']" @click.stop="like(item.id, index)">{{item.favoriteCount}}</div>
