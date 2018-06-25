@@ -5,7 +5,8 @@ let staticOrigin = ''
 
 if (process.env.NODE_ENV === 'development') { // 开发环境
   origin = '//47.106.98.124'
-  staticOrigin = origin + '/cjjjapi'
+  // staticOrigin = origin + '/cjjjapi'
+  staticOrigin = '//www.cjhome.vip/cjjjapi'
 } else { // 编译环境
   // 测试环境
   if (process.env.type === 'test') {

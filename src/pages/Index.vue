@@ -38,6 +38,8 @@
       </div>
     </div>
     <div class="no-data" v-else>暂无数据</div>
+    <div class="tc loadmore-txt" v-if="caseList.length && !allLoaded">上拉可加载更多数据</div>
+    <div class="tc loadmore-txt" v-if="caseList.length && allLoaded">-- 无更多数据 --</div>
   </mt-loadmore>
   <div class="mask-cont" v-show="typeStyle['max-height']" @touchstart="maskTouch($event)"></div>
   <order-btn></order-btn>
@@ -63,7 +65,7 @@ export default {
       typeName: '户型',
       curId: '',
       pageNo: 1,
-      pageSize: 15,
+      pageSize: 5, // 15
       allLoaded: false,
       yjjjCaseLikedIdArray: [],
       origin,
@@ -194,6 +196,9 @@ export default {
     //     })
     // },
     changeType (id, name) {
+      if (!id) {
+        this.cityName = this.buildingName = this.typeName = '全部'
+      }
       switch (this.curType) {
         case 'city':
           this.cityId = id
@@ -241,7 +246,6 @@ export default {
       })
         .then(res => {
           this.$indicator.close()
-          this.$refs.loadmore.onBottomLoaded()
           if (res.data.code) {
             return this.$toast(res.data.message)
           }
@@ -253,6 +257,7 @@ export default {
           } else {
             this.caseList = this.caseList.concat(res.data.data)
           }
+          this.$refs.loadmore.onBottomLoaded()
         })
         .catch(err => {
           this.$indicator.close()
@@ -296,7 +301,7 @@ export default {
       window.location.href = './team.html'
     },
     loadBottom () {
-      if (!this.loadmore) {
+      if (!this.allLoaded) {
         this.pageNo++
         this.getCaseList()
       }
@@ -321,7 +326,7 @@ export default {
 @import '../assets/css/reset.scss';
 @import '../assets/css/common.scss';
 
-body {
+.page-item {
   padding-top: 1rem;
 }
 .mask-cont {
@@ -445,5 +450,10 @@ header {
 .no-data {
   line-height: 2rem;
   text-align: center;
+}
+.loadmore-txt {
+  position: relative;
+  top: -.5rem;
+  color: #888;
 }
 </style>

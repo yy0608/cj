@@ -9,8 +9,8 @@
         </div>
         <div class="text-cont">
           <div class="title-cont">
-            <div class="name">{{item2.name}}</div>
-            <div class="wechat" @click="handleShowQrUrl(item2.qrUrl)">+ 微信</div>
+            <div class="name">{{item2.name}} | {{item2.title}}</div>
+            <div v-if="!isEmptyUrl(item2.qrUrl)" class="wechat" @click="handleShowQrUrl(item2.qrUrl)">+ 微信</div>
           </div>
           <div class="intro">{{item2.noteInfo}}</div>
         </div>
@@ -26,7 +26,7 @@
 
 <script>
 import axios from 'axios'
-import { origin } from '@/config'
+import { origin, staticOrigin } from '@/config'
 import OrderBtn from '@/components/OrderBtn.vue'
 
 export default {
@@ -68,6 +68,12 @@ export default {
     imgError (e) {
       this.$toast('图片加载失败')
       e.currentTarget.src = 'https://dn-placeholder.qbox.me/200x200/f5f5f5/888'
+    },
+    isEmptyUrl (url) {
+      if (!url || url === location.protocol + staticOrigin + '/') {
+        return true
+      }
+      return false
     }
   }
 }
@@ -76,6 +82,10 @@ export default {
 <style lang="scss">
 @import '../assets/css/reset.scss';
 @import '../assets/css/common.scss';
+
+.page-item {
+  padding-bottom: 1rem;
+}
 
 .team-cont-item {
   padding: .2rem 0 .2rem .2rem;
@@ -130,6 +140,7 @@ export default {
     .intro {
       margin-top: .15rem;
       color: #666;
+      line-height: .36rem;
     }
   }
 }
