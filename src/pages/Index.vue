@@ -59,10 +59,10 @@ export default {
       curType: '',
       cityId: '',
       displayRealUrl,
-      cityName: '城市',
+      cityName: '全部',
       buildingId: '',
-      buildingName: '楼盘',
-      typeName: '户型',
+      buildingName: '全部',
+      typeName: '全部',
       curId: '',
       pageNo: 1,
       pageSize: 5, // 15
@@ -109,6 +109,30 @@ export default {
       e.preventDefault()
     },
     getTypeList (type, name) {
+      let url = origin + '/cjjjapi/wx/'
+      let data = {}
+      switch (type) {
+        case 'city':
+          url += 'findBizHouseCitys.action'
+          break
+        case 'area':
+          if (this.cityName === '全部') {
+            return this.$toast('请先选择城市')
+          }
+          url += 'findBizHouseAreas.action'
+          data = { cityId: this.cityId }
+          break
+        case 'type':
+          if (this.buildingName === '全部') {
+            return this.$toast('请先选择楼盘')
+          }
+          url += 'findBizHouseTypes.action'
+          data = { buildingId: this.buildingId }
+          break
+        default:
+          break
+      }
+
       if (type === this.curType) {
         if (!this.typeStyle['max-height']) {
           this.typeStyle = { 'max-height': '999px' }
@@ -120,23 +144,6 @@ export default {
       }
       this.curType = type
 
-      let url = origin + '/cjjjapi/wx/'
-      let data = {}
-      switch (type) {
-        case 'city':
-          url += 'findBizHouseCitys.action'
-          break
-        case 'area':
-          url += 'findBizHouseAreas.action'
-          data = { cityId: this.cityId }
-          break
-        case 'type':
-          url += 'findBizHouseTypes.action'
-          data = { buildingId: this.buildingId }
-          break
-        default:
-          break
-      }
       this.$indicator.open({ spinnerType: 'fading-circle' })
       axios({
         url,
@@ -203,10 +210,12 @@ export default {
         case 'city':
           this.cityId = id
           this.cityName = name
+          this.buildingName = this.typeName = '全部'
           break
         case 'area':
           this.buildingId = id
           this.buildingName = name
+          this.typeName = '全部'
           break
         case 'type':
           this.typeName = name

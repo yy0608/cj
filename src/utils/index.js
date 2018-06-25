@@ -15,3 +15,7 @@ export const displayRealUrl = (prefix, url) => {
     return prefix + url
   }
 }
+
+export const changeTitle = title => {
+  document.title = title
+}

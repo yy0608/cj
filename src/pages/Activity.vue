@@ -38,7 +38,7 @@
 <script>
 import axios from 'axios'
 import { origin, staticOrigin } from '@/config'
-import { getQueryString, displayRealUrl } from '@/utils'
+import { getQueryString, displayRealUrl, changeTitle } from '@/utils'
 import slider from 'vue-concise-slider'
 
 export default {
@@ -102,6 +102,8 @@ export default {
           sliderImgs = []
         }
         this.bannerSrc = this.id ? res.data.data.mainPic : res.data.data[0].mainPic
+        let title = this.id ? res.data.data.name : res.data.data[0].name
+        changeTitle(title)
         for (let item of sliderImgs) {
           let obj = {}
           obj.style = {
