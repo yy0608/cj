@@ -29,7 +29,7 @@
         <input type="text" v-model="form.building">
       </div>
       <div class="tc order-btn" @click="order">点击预约</div>
-      <div class="tc custom-btn" @click="goCustom">定制须知</div>
+      <div class="tc custom-btn" @click="goCustom">订购须知</div>
     </div>
   </div>
 </div>

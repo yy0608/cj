@@ -6,7 +6,7 @@
   <a class="link-item sub" href="./get.html">领取</a>
   <a class="link-item" href="./company.html">公司简介</a>
   <a class="link-item" href="./products.html">产品介绍</a>
-  <a class="link-item" href="./custom.html">定制须知</a>
+  <a class="link-item" href="./custom.html">订购须知</a>
   <a class="link-item" href="./team.html">团队展示</a>
 </div>
 </template>

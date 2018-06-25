@@ -123,6 +123,9 @@ export default {
           data = { cityId: this.cityId }
           break
         case 'type':
+          if (this.cityName === '全部') {
+            return this.$toast('请先选择城市')
+          }
           if (this.buildingName === '全部') {
             return this.$toast('请先选择楼盘')
           }
