@@ -102,6 +102,7 @@ export default {
           sliderImgs = []
         }
         this.bannerSrc = this.id ? res.data.data.mainPic : res.data.data[0].mainPic
+        this.activityId = this.id || res.data.data[0].id
         let title = this.id ? res.data.data.name : res.data.data[0].name
         changeTitle(title)
         for (let item of sliderImgs) {
@@ -133,7 +134,8 @@ export default {
       let data = {
         creatorName: this.form.name,
         phone: this.form.phone,
-        cityBuilding: this.form.city + this.form.building
+        cityBuilding: this.form.city + this.form.building,
+        activityId: this.activityId
       }
       this.$indicator.open({ spinnerType: 'fading-circle' })
       axios({
