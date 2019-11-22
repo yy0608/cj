@@ -5,7 +5,7 @@
   "author": "youyi <447462224@qq.com>",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev": "webpack-dev-server --inline --config build/webpack.dev.conf.js",
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js",
@@ -16,6 +16,7 @@
     "fastclick": "^1.0.6",
     "mint-ui": "^2.2.13",
     "node-sass": "^4.9.0",
+    "progress-bar-webpack-plugin": "^1.12.1",
     "sass-loader": "^7.0.1",
     "vue": "^2.5.2",
     "vue-concise-slider": "^2.4.8"
@@ -61,7 +62,7 @@
     "shelljs": "^0.7.6",
     "uglifyjs-webpack-plugin": "^1.1.1",
     "url-loader": "^0.5.8",
-    "vue-loader": "^13.3.0",
+    "vue-loader": "14.2.4",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.5.2",
     "webpack": "^3.6.0",
