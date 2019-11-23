@@ -55,6 +55,7 @@
       <img src="../assets/imgs/order/bed.png">
       <div class="play-icon"></div>
     </div>
+    <video src="../assets/file/order.mp4" autoplay></video>
   </div>
   <div class="title-cont-item house-cont">
     <div class="title-bg"></div>
@@ -521,6 +522,10 @@ export default {
         background: url('../assets/imgs/order/play.png') no-repeat center center;
         background-size: contain;
       }
+    }
+    video {
+      margin: .3rem;
+      width: 7.2rem;
     }
   }
   .house-cont {
