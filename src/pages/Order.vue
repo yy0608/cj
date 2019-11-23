@@ -1,7 +1,7 @@
 <template>
 <div class="page-item order-page-cont">
-  <img class="logo-img" src="../assets/imgs/order/logo.png">
-  <div class="tc bg-cont">
+  <img class="logo-img" src="../assets/imgs/order/logo.png" style="position: relative; z-index: 5;">
+  <div class="tc bg-cont" style="margin-top: -.8rem;">
     <img src="../assets/imgs/order/backbg.png">
     <img class="forbg" src="../assets/imgs/order/forbg.png">
   </div>
@@ -32,12 +32,19 @@
       </div>
       <div class="tc tips">*预约成功即可免费预览同户型3D全景效果图</div>
       <div class="tc submit-cont">
-        <img src="../assets/imgs/order/order.png">
+        <img src="../assets/imgs/order/order.png" @click="maskShow = true">
       </div>
     </div>
     <div class="ordered-show">
       <div class="quot-item left"></div>
-      <div class="ordered-list">恭喜 玖龙台李**  136****8754 免费预约成功</div>
+      <!-- <div class="ordered-list">恭喜 玖龙台李**  136****8754 免费预约成功</div> -->
+      <slider
+        ref="slider"
+        :pages="orderedListPages"
+        :sliderinit="orderedList">
+        <!-- 设置loading,可自定义 -->
+        <div slot="loading">loading...</div>
+      </slider>
       <div class="quot-item right"></div>
     </div>
   </div>
@@ -102,6 +109,17 @@
       <img src="../assets/imgs/order/order.png">
     </div>
   </div>
+  <div class="mask-cont" v-show="maskShow">
+    <div class="main-cont">
+      <img class="success" src="../assets/imgs/order/success.png">
+      <div class="status">预约成功</div>
+      <div class="content">您已成功获得童话森林•创家家居设计师免费量尺设计名额。</div>
+      <div class="tips">（请留意客服来电）</div>
+      <div class="vr">
+        <img src="../assets/imgs/order/vr.png" @click="maskShow = false">
+      </div>
+    </div>
+  </div>
 </div>
 </template>
 
@@ -116,6 +134,7 @@ export default {
     let arr2 = ['时尚简奢', '北欧', '现代简约', '新中式']
     let arr3 = ['验房团购', '免费出方案', '现金抵扣']
     return {
+      maskShow: false,
       stepsList: [
         {
           img: 'step1.png',
@@ -173,6 +192,17 @@ export default {
           }
         }
       ],
+      orderedListPages: [
+        {
+          html: '恭喜 北京市李**  136****8754 免费预约成功'
+        },
+        {
+          html: '恭喜 深圳市邹**  186****8888 免费预约成功'
+        },
+        {
+          html: '恭喜 上海市吴**  166****6666 免费预约成功'
+        }
+      ],
       sliderinit1: {
         // currentPage: 0,
         // thresholdDistance: 500,
@@ -209,6 +239,13 @@ export default {
             class: 'pagination-item'
           }, [arr3[index - 1]])
         }
+      },
+      orderedList: {
+        autoplay: 3000,
+        loop: true,
+        pagination: false,
+        direction: 'vertical',
+        duration: 300
       }
     }
   },
@@ -329,6 +366,7 @@ export default {
       margin-top: .2rem;
       img {
         width: 2.6rem;
+        animation: scaleBtn 1s ease-out infinite alternate;
         box-shadow: 0px 10px 20px 0px rgba(35,63,61,0.5);
       }
     }
@@ -391,6 +429,8 @@ export default {
     align-items: center;
     justify-content: center;
     padding-bottom: .4rem;
+    margin-left: .3rem;
+    margin-right: .3rem;
     .quot-item {
       width: .46rem;
       height: .46rem;
@@ -406,6 +446,15 @@ export default {
     .ordered-list {
       font-size: .26rem;
       margin: 0 .28rem;
+    }
+    .slider-container {
+      margin: 0 .28rem;
+      height: .26rem;
+      .slider-item {
+        color: #333;
+        font-size: .26rem;
+        line-height: .26rem;
+      }
     }
   }
   .title-cont-item .title-bg {
@@ -502,6 +551,7 @@ export default {
       margin-top: .4rem;
       img {
         width: 4.6rem;
+        animation: scaleBtn 1s ease-out infinite alternate;
         box-shadow:0px 10px 20px 0px rgba(35,63,61,0.5);
       }
     }
@@ -609,7 +659,9 @@ export default {
       flex-shrink: 0;
       padding-left: .16rem;
       text-align: center;
+      // box-shadow:0px 10px 20px 0px rgba(35,63,61,0.5);
       img {
+        animation: scaleBtn 1s ease-out infinite alternate;
         width: 2.4rem;
       }
     }
@@ -657,5 +709,56 @@ export default {
       }
     }
   }
+  .mask-cont {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    z-index: 10;
+    .main-cont {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin-left: -2.7rem;
+      margin-top: -2.7rem;
+      padding-top: .4rem;
+      width: 5.4rem;
+      height: 5rem;
+      background-color: #fff;
+      border-radius: .2rem;
+      text-align: center;
+    }
+    .success {
+      width: 1.4rem;
+      height: 1.4rem;
+    }
+    .status {
+      font-size: .32rem;
+      color: #FC7548;
+    }
+    .content {
+      margin: .3rem .45rem;
+      font-size: .32rem;
+      line-height: 1.3;
+      color: #1E1E1E;
+    }
+    .tips {
+      margin-bottom: .3rem;
+    }
+    .vr {
+      text-align: center;
+      img {
+        width: 4.6rem;
+        animation: scaleBtn 1s ease-out infinite alternate;
+      }
+    }
+  }
+}
+@keyframes scaleBtn {
+  0% {transform: scale(1);}
+  50% {transform: scale(1.1);}
+  100% {transform: scale(1);}
 }
 </style>
