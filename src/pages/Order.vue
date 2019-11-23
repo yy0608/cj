@@ -51,13 +51,56 @@
   </div>
   <div class="title-cont-item house-cont">
     <div class="title-bg"></div>
+    <div class="white-block"></div>
     <slider
+      class="common-slider"
       ref="slider"
       :pages="sliderPages"
-      :sliderinit="sliderinit">
+      :sliderinit="sliderinit1">
       <!-- 设置loading,可自定义 -->
       <div slot="loading">loading...</div>
     </slider>
+    <div class="tc see-vr">
+      <img src="../assets/imgs/order/vr.png">
+    </div>
+  </div>
+  <div class="title-cont-item style-cont">
+    <div class="title-bg"></div>
+    <div class="white-block"></div>
+    <slider
+      class="common-slider"
+      ref="slider"
+      :pages="sliderPages"
+      :sliderinit="sliderinit2">
+      <!-- 设置loading,可自定义 -->
+      <div slot="loading">loading...</div>
+    </slider>
+  </div>
+  <div class="welfare-cont">
+    <div class="tc text-cont">
+      <div class="txt1">玖龙台业主专享福利</div>
+      <div class="txt2">限100户</div>
+    </div>
+    <slider
+      ref="slider"
+      :pages="sliderPages3"
+      :sliderinit="sliderinit3">
+      <!-- 设置loading,可自定义 -->
+      <div slot="loading">loading...</div>
+    </slider>
+  </div>
+  <div class="footer-cont">
+    <div class="qrcode">
+      <img src="../assets/imgs/order/code.jpg">
+    </div>
+    <div class="text">
+      <p>识别左侧二维码</p>
+      <p>免费咨询更多活动内容</p>
+      <p>预览更多其他户型效果图</p>
+    </div>
+    <div class="button">
+      <img src="../assets/imgs/order/order.png">
+    </div>
   </div>
 </div>
 </template>
@@ -69,6 +112,9 @@ import slider from 'vue-concise-slider'
 
 export default {
   data () {
+    let arr1 = ['客厅', '餐厅', '主卧', '多功能房']
+    let arr2 = ['时尚简奢', '北欧', '现代简约', '新中式']
+    let arr3 = ['验房团购', '免费出方案', '现金抵扣']
     return {
       stepsList: [
         {
@@ -91,12 +137,43 @@ export default {
       sliderPages: [
         {
           style: {
-            height: '200px',
+            background: 'url(http://www.cjhome.vip/cjjjapi//pics/act/2018-11-21-16.00.11.5870.3838959981735608.jpg) no-repeat center center'
+          }
+        },
+        {
+          style: {
+            background: 'url(http://www.cjhome.vip/cjjjapi//pics/act/2018-11-21-16.00.17.6810.7949744086730924.jpg) no-repeat center center'
+          }
+        },
+        {
+          style: {
+            background: 'url(http://www.cjhome.vip/cjjjapi//pics/act/2018-11-21-16.00.23.9460.4814247874799432.jpg) no-repeat center center'
+          }
+        },
+        {
+          style: {
+            background: 'url(http://www.cjhome.vip/cjjjapi//pics/act/2018-11-21-16.00.30.4460.403050646199278.jpg) no-repeat center center'
+          }
+        }
+      ],
+      sliderPages3: [
+        {
+          style: {
+            background: 'url(http://www.cjhome.vip/cjjjapi//pics/act/2018-11-21-16.00.11.5870.3838959981735608.jpg) no-repeat center center'
+          }
+        },
+        {
+          style: {
+            background: 'url(http://www.cjhome.vip/cjjjapi//pics/act/2018-11-21-16.00.17.6810.7949744086730924.jpg) no-repeat center center'
+          }
+        },
+        {
+          style: {
             background: 'url(http://www.cjhome.vip/cjjjapi//pics/act/2018-11-21-16.00.23.9460.4814247874799432.jpg) no-repeat center center'
           }
         }
       ],
-      sliderinit: {
+      sliderinit1: {
         // currentPage: 0,
         // thresholdDistance: 500,
         // thresholdTime: 100,
@@ -106,7 +183,32 @@ export default {
         // infinite: 1,
         // slidesToScroll: 1,
         // timingFunction: 'ease',
-        duration: 300
+        duration: 300,
+        renderPagination: (h, index) => {
+          return h('div', {
+            class: 'pagination-item'
+          }, [arr1[index - 1]])
+        }
+      },
+      sliderinit2: {
+        autoplay: 5000,
+        loop: true,
+        duration: 300,
+        renderPagination: (h, index) => {
+          return h('div', {
+            class: 'pagination-item'
+          }, [arr2[index - 1]])
+        }
+      },
+      sliderinit3: {
+        autoplay: 5000,
+        loop: true,
+        duration: 300,
+        renderPagination: (h, index) => {
+          return h('div', {
+            class: 'pagination-item'
+          }, [arr3[index - 1]])
+        }
       }
     }
   },
@@ -337,7 +439,7 @@ export default {
     background-color: #EDF0E9;
     .title-bg {
       background: url('../assets/imgs/order/tree.png') no-repeat left center;
-      background-size: 1.6rem auto;
+      background-size: auto 1.22rem;
       &::before {
         background-color: #CCD5C1;
       }
@@ -373,16 +475,185 @@ export default {
     }
   }
   .house-cont {
+    position: relative;
     padding-top: .36rem;
+    padding-bottom: 1.1rem;
     background-color: #F4DFCC;
     .title-bg {
       background: url('../assets/imgs/order/pen.png') no-repeat left center;
-      background-size: 1.6rem auto;
+      background-size: auto 1.22rem;
       &::before {
         background-color: #D8B494;
       }
       &::after {
         content: '全屋免费设计 定制理想之家';
+      }
+    }
+    .white-block {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 5.4rem;
+      background-color: #fff;
+    }
+    .see-vr {
+      position: relative;
+      margin-top: .4rem;
+      img {
+        width: 4.6rem;
+        box-shadow:0px 10px 20px 0px rgba(35,63,61,0.5);
+      }
+    }
+  }
+  .style-cont {
+    position: relative;
+    padding-top: .43rem;
+    padding-bottom: 1.1rem;
+    background-color: #C5DEDB;
+    .title-bg {
+      background: url('../assets/imgs/order/brush.png') no-repeat left center;
+      background-size: auto 1.22rem;
+      &::before {
+        background-color: #9ECEC8;
+      }
+      &::after {
+        content: '风格齐全 任君选择';
+      }
+    }
+    .white-block {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 4.2rem;
+      background-color: #fff;
+    }
+    .slider-container {
+      margin-bottom: 0;
+    }
+  }
+  .welfare-cont {
+    padding-bottom: .44rem;
+    background: url('../assets/imgs/order/welfare.png') no-repeat center top;
+    background-size: 100% auto;
+    .text-cont {
+      padding-top: 1.43rem;
+      color: #EA2A2E;
+      .txt1 {
+        font-size: .6rem;
+        font-weight: bold;
+      }
+      .txt2 {
+        margin-top: .28rem;
+        font-size: .3rem;
+      }
+    }
+    .slider-container {
+      height: initial;
+      margin: .68rem .3rem 0;
+      width: initial;
+      background-color: #fff;
+      .slider-item {
+        height: 3.88rem;
+        background-size: cover !important;
+      }
+      .slider-pagination {
+        position: initial;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: initial;
+        margin-top: .4rem;
+        .pagination-item {
+          position: relative;
+          flex-grow: 1;
+          height: .6rem;
+          line-height: .6rem;
+          font-size: .3rem;
+          border: 1px solid transparent;
+          color: #666;
+        }
+        .slider-pagination-bullet-active-render {
+          color: #A284D7;
+          border-color: #A284D7;
+          border-radius: .3rem;
+        }
+      }
+    }
+  }
+  .footer-cont {
+    display: flex;
+    align-items: center;
+    padding: .2rem;
+    background-color: #C5DEDB;
+    .qrcode {
+      flex-shrink: 0;
+      img {
+        width: 1.6rem;
+      }
+    }
+    .text {
+      flex-grow: 1;
+      margin-left: .11rem;
+      font-size: .24rem;
+      color: #1F524E;
+      p {
+        margin-bottom: .1rem;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+    .button {
+      flex-shrink: 0;
+      padding-left: .16rem;
+      text-align: center;
+      img {
+        width: 2.4rem;
+      }
+    }
+  }
+  .common-slider {
+    margin: .68rem .3rem;
+    width: initial;
+    background-color: #fff;
+    .slider-item {
+      height: 3.88rem;
+      background-size: cover !important;
+    }
+    .slider-pagination {
+      position: initial;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: initial;
+      height: .8rem;
+      margin-top: .2rem;
+      border: 1px solid #CCCCCC;
+      .pagination-item {
+        position: relative;
+        flex-grow: 1;
+        height: .4rem;
+        line-height: .4rem;
+        font-size: .3rem;
+        color: #999;
+        &:after {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 1px;
+          height: 100%;
+          background-color: #CCCCCC;
+        }
+        &:last-child:after {
+          display: none;
+        }
+      }
+      .slider-pagination-bullet-active-render {
+        color: #1F524E;
+        font-weight: bold;
       }
     }
   }
