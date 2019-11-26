@@ -4,13 +4,13 @@ let origin = ''
 let staticOrigin = ''
 
 if (process.env.NODE_ENV === 'development') { // 开发环境
-  origin = '//47.106.98.124'
+  origin = 'http://14.215.51.234:10003'
   // staticOrigin = origin + '/cjjjapi'
   staticOrigin = '//www.cjhome.vip/cjjjapi'
 } else { // 编译环境
   // 测试环境
   if (process.env.type === 'test') {
-    origin = '//120.76.188.39:8080'
+    origin = 'http://14.215.51.234:10003'
   // 正式环境
   } else {
     origin = '//47.106.98.124'

@@ -2,7 +2,8 @@
 <div class="page-item order-page-cont">
   <img class="logo-img" src="../assets/imgs/order/logo.png" style="position: relative; z-index: 5;">
   <div class="tc bg-cont" style="margin-top: -.8rem;">
-    <img src="../assets/imgs/order/backbg.png">
+    <!-- <img src="../assets/imgs/order/backbg.png"> -->
+    <img :src="coverImg" v-if="coverImg">
     <img class="forbg" src="../assets/imgs/order/forbg.png">
   </div>
   <div class="steps-cont">
@@ -10,7 +11,8 @@
       class="step-item"
       v-for="(item, index) in stepsList"
       :key="index">
-      <img :src="require('../assets/imgs/order/' + item.img)" class="img">
+      <!-- <img :src="require('../assets/imgs/order/' + item.img)" class="img"> -->
+      <img :src="item.img" class="img">
       <div class="tc txt">{{item.text}}</div>
       <div class="rect">{{index + 1}}</div>
     </div>
@@ -19,20 +21,25 @@
     <div class="form-cont">
       <div class="title-cont">
         <div class="label">现名额仅剩</div>
-        <div class="number">9</div>
-        <div class="number">9</div>
+        <div
+          class="number"
+          :class="{ 'last': index === (inventoryNum + '').split('').length - 1 }"
+          v-for="(item, index) in (inventoryNum + '').split('')"
+          :key="index">{{ item }}</div>
+        <!-- <div class="number">9</div>
+        <div class="number">9</div> -->
       </div>
       <div class="form-item">
         <div class="input-icon name"></div>
-        <input type="text" placeholder="输入姓名获得免费设计">
+        <input type="text" v-model.trim="form.name" placeholder="输入姓名获得免费设计">
       </div>
       <div class="form-item">
         <div class="input-icon phone"></div>
-        <input type="text" placeholder="方便专业设计师联系您">
+        <input type="text" v-model.trim="form.phone" placeholder="方便专业设计师联系您">
       </div>
       <div class="tc tips">*预约成功即可免费预览同户型3D全景效果图</div>
       <div class="tc submit-cont">
-        <img src="../assets/imgs/order/order2.png" @click="maskShow = true">
+        <img src="../assets/imgs/order/order2.png" @click="handleSubmit">
       </div>
     </div>
     <div class="ordered-show">
@@ -52,10 +59,12 @@
     <div class="title-bg"></div>
     <div class="white-block"></div>
     <div class="video-trigger">
-      <img src="../assets/imgs/order/bed.png">
-      <div class="play-icon"></div>
+      <!-- <img src="../assets/imgs/order/bed.png"> -->
+      <img :src="videoCover">
+      <div class="play-icon" @click="handleVideo"></div>
     </div>
-    <video src="../assets/file/order.mp4" autoplay></video>
+    <!-- <video src="../assets/file/order.mp4"></video> -->
+    <video :src="videoSrc" id="video"></video>
   </div>
   <div class="title-cont-item house-cont">
     <div class="title-bg"></div>
@@ -63,7 +72,7 @@
     <slider
       class="common-slider"
       ref="slider"
-      :pages="sliderPages"
+      :pages="sliderPages1"
       :sliderinit="sliderinit1">
       <!-- 设置loading,可自定义 -->
       <div slot="loading">loading...</div>
@@ -78,7 +87,7 @@
     <slider
       class="common-slider"
       ref="slider"
-      :pages="sliderPages"
+      :pages="sliderPages2"
       :sliderinit="sliderinit2">
       <!-- 设置loading,可自定义 -->
       <div slot="loading">loading...</div>
@@ -86,7 +95,7 @@
   </div>
   <div class="welfare-cont">
     <div class="tc text-cont">
-      <div class="txt1">玖龙台业主专享福利</div>
+      <div class="txt1">{{ projectName }}业主专享福利</div>
       <div class="txt2">限100户</div>
     </div>
     <slider
@@ -99,7 +108,8 @@
   </div>
   <div class="footer-cont">
     <div class="qrcode">
-      <img src="../assets/imgs/order/code.jpg">
+      <!-- <img src="../assets/imgs/order/code.jpg"> -->
+      <img :src="staticOrigin + qrCode" v-if="qrCode">
     </div>
     <div class="text">
       <p>识别左侧二维码</p>
@@ -125,84 +135,62 @@
 </template>
 
 <script>
-// import axios from 'axios'
-// import { origin, staticOrigin } from '@/config'
+import axios from 'axios'
+import { origin, staticOrigin } from '@/config'
 import slider from 'vue-concise-slider'
 
 export default {
   data () {
-    let arr1 = ['客厅', '餐厅', '主卧', '多功能房']
-    let arr2 = ['时尚简奢', '北欧', '现代简约', '新中式']
-    let arr3 = ['验房团购', '免费出方案', '现金抵扣']
+    // let arr1 = ['客厅', '餐厅', '主卧', '多功能房']
+    // let arr2 = ['时尚简奢', '北欧', '现代简约', '新中式']
+    // let arr3 = ['验房团购', '免费出方案', '现金抵扣']
     return {
       maskShow: false,
+      coverImg: '', // 封面背景
+      videoCover: '', // 视频封面
+      videoSrc: '', // 视频地址
+      projectName: '', // 项目名称
+      inventoryNum: 0, // 库存
+      sliderinitArr1: [], // 文字
+      sliderinitArr2: [],
+      sliderinitArr3: [],
+      qrCode: '', // 二维码
+      form: { // 提交信息
+        name: '',
+        phone: ''
+      },
+      staticOrigin,
       stepsList: [
-        {
-          img: 'step1.png',
-          text: '团购价验房'
-        },
-        {
-          img: 'step2.png',
-          text: '免费上门量尺'
-        },
-        {
-          img: 'step3.png',
-          text: '免费设计出图'
-        },
-        {
-          img: 'step4.png',
-          text: '免费送货安装'
-        }
+        // {
+        //   img: 'step1.png',
+        //   text: '团购价验房'
+        // },
+        // {
+        //   img: 'step2.png',
+        //   text: '免费上门量尺'
+        // },
+        // {
+        //   img: 'step3.png',
+        //   text: '免费设计出图'
+        // },
+        // {
+        //   img: 'step4.png',
+        //   text: '免费送货安装'
+        // }
       ],
-      sliderPages: [
-        {
-          style: {
-            background: 'url(http://www.cjhome.vip/cjjjapi//pics/act/2018-11-21-16.00.11.5870.3838959981735608.jpg) no-repeat center center'
-          }
-        },
-        {
-          style: {
-            background: 'url(http://www.cjhome.vip/cjjjapi//pics/act/2018-11-21-16.00.17.6810.7949744086730924.jpg) no-repeat center center'
-          }
-        },
-        {
-          style: {
-            background: 'url(http://www.cjhome.vip/cjjjapi//pics/act/2018-11-21-16.00.23.9460.4814247874799432.jpg) no-repeat center center'
-          }
-        },
-        {
-          style: {
-            background: 'url(http://www.cjhome.vip/cjjjapi//pics/act/2018-11-21-16.00.30.4460.403050646199278.jpg) no-repeat center center'
-          }
-        }
-      ],
-      sliderPages3: [
-        {
-          style: {
-            background: 'url(http://www.cjhome.vip/cjjjapi//pics/act/2018-11-21-16.00.11.5870.3838959981735608.jpg) no-repeat center center'
-          }
-        },
-        {
-          style: {
-            background: 'url(http://www.cjhome.vip/cjjjapi//pics/act/2018-11-21-16.00.17.6810.7949744086730924.jpg) no-repeat center center'
-          }
-        },
-        {
-          style: {
-            background: 'url(http://www.cjhome.vip/cjjjapi//pics/act/2018-11-21-16.00.23.9460.4814247874799432.jpg) no-repeat center center'
-          }
-        }
-      ],
+      sliderPages1: [],
+      sliderPages2: [],
+      sliderPages3: [],
       orderedListPages: [
-        {
-          html: '恭喜 北京市李**  136****8754 免费预约成功'
-        },
-        {
-          html: '恭喜 深圳市邹**  186****8888 免费预约成功'
-        },
-        {
-          html: '恭喜 上海市吴**  166****6666 免费预约成功'
-        }
+        // {
+        //   html: '恭喜 北京市李**  136****8754 免费预约成功'
+        // },
+        // {
+        //   html: '恭喜 深圳市邹**  186****8888 免费预约成功'
+        // },
+        // {
+        //   html: '恭喜 上海市吴**  166****6666 免费预约成功'
+        // }
       ],
       sliderinit1: {
         // currentPage: 0,
@@ -214,32 +202,27 @@ export default {
         // infinite: 1,
         // slidesToScroll: 1,
         // timingFunction: 'ease',
-        duration: 300,
-        renderPagination: (h, index) => {
-          return h('div', {
-            class: 'pagination-item'
-          }, [arr1[index - 1]])
-        }
+        duration: 300
+        // renderPagination: (h, index) => {
+        //   return h('div', {
+        //     class: 'pagination-item'
+        //   }, [arr1[index - 1]])
+        // }
       },
       sliderinit2: {
         autoplay: 5000,
         loop: true,
-        duration: 300,
-        renderPagination: (h, index) => {
-          return h('div', {
-            class: 'pagination-item'
-          }, [arr2[index - 1]])
-        }
+        duration: 300
+        // renderPagination: (h, index) => {
+        //   return h('div', {
+        //     class: 'pagination-item'
+        //   }, [arr2[index - 1]])
+        // }
       },
       sliderinit3: {
         autoplay: 5000,
         loop: true,
-        duration: 300,
-        renderPagination: (h, index) => {
-          return h('div', {
-            class: 'pagination-item'
-          }, [arr3[index - 1]])
-        }
+        duration: 300
       },
       orderedList: {
         autoplay: 3000,
@@ -247,6 +230,181 @@ export default {
         pagination: false,
         direction: 'vertical',
         duration: 300
+      }
+    }
+  },
+  created () {
+    this.getImgText()
+    this.getPics()
+    this.getInventory()
+    this.getOrderList()
+  },
+  methods: {
+    // 引流图文
+    async getImgText () {
+      const { data: resData = {} } = await axios({
+        url: origin + '/cjjjapi/wx/getDrainageParams.action',
+        method: 'post',
+        data: {}
+      })
+      const { data = [] } = resData
+      for (let item of data) {
+        if (item.cfgId === 'pageTitle') {
+          document.title = item.cfgValue
+        }
+        if (item.cfgId === 'projectName') {
+          this.projectName = item.cfgValue
+        }
+        if (item.cfgId === 'twoDimensionCodeLinking') {
+          this.qrCode = item.cfgValue
+        }
+      }
+    },
+    // 二维码链接
+    // async getCode () {
+    //   const { data: resData = {} } = await axios({
+    //     url: origin + '/cjjjapi/wx/getTwoDimensionCodeLinking.action',
+    //     method: 'post',
+    //     data: {}
+    //   })
+    //   console.log(resData)
+    // },
+    // 引流图片，大部分图片来自此处
+    async getPics () {
+      const { data: resData = {} } = await axios({
+        url: origin + '/cjjjapi/wx/findBizMultiPicssYl.action',
+        method: 'post',
+        data: {
+          pageNo: 1,
+          pageSize: 100
+        }
+      })
+      const { data = [] } = resData
+      for (let item of data) {
+        switch (item.name) {
+          case '0元预约背景':
+            this.coverImg = item.mainPic
+            break
+          case '视频':
+            this.videoCover = item.mainPic
+            try {
+              this.videoSrc = JSON.parse(item.detailPicList)[0].url
+            } catch (error) {}
+            break
+          case '流程(1/4)':
+          case '流程(2/4)':
+          case '流程(3/4)':
+          case '流程(4/4)':
+            this.stepsList.push({
+              img: item.mainPic,
+              text: item.phone
+            })
+            break
+          case '房屋设计(1/4)':
+          case '房屋设计(2/4)':
+          case '房屋设计(3/4)':
+          case '房屋设计(4/4)':
+            this.sliderPages1.push({
+              style: {
+                background: `url(${item.mainPic}) no-repeat center center`
+              }
+            })
+            this.sliderinitArr1.push(item.phone)
+            break
+          case '风格选择(1/4)':
+          case '风格选择(2/4)':
+          case '风格选择(3/4)':
+          case '风格选择(4/4)':
+            this.sliderPages2.push({
+              style: {
+                background: `url(${item.mainPic}) no-repeat center center`
+              }
+            })
+            this.sliderinitArr2.push(item.phone)
+            break
+          case 'vip(1/3)':
+          case 'vip(2/3)':
+          case 'vip(3/3)':
+            this.sliderPages3.push({
+              style: {
+                background: `url(${item.mainPic}) no-repeat center center`
+              }
+            })
+            this.sliderinitArr3.push(item.phone)
+            break
+        }
+      }
+      this.sliderinit1.renderPagination = (h, index) => {
+        return h('div', {
+          class: 'pagination-item'
+        }, [this.sliderinitArr1[index - 1]])
+      }
+      this.sliderinit2.renderPagination = (h, index) => {
+        return h('div', {
+          class: 'pagination-item'
+        }, [this.sliderinitArr2[index - 1]])
+      }
+      this.sliderinit3.renderPagination = (h, index) => {
+        return h('div', {
+          class: 'pagination-item'
+        }, [this.sliderinitArr3[index - 1]])
+      }
+    },
+    // 虚拟库存
+    async getInventory () {
+      const { data: resData = {} } = await axios({
+        url: origin + '/cjjjapi/wx/getInventoryQuantity.action',
+        method: 'post',
+        data: {}
+      })
+      const { data = 0 } = resData
+      this.inventoryNum = data
+    },
+    // 预约记录
+    async getOrderList () {
+      const { data: resData = {} } = await axios({
+        url: origin + '/cjjjapi/wx/findBizBookingUsersAll.action',
+        method: 'post',
+        data: {}
+      })
+      const { data = [] } = resData
+      this.orderedListPages = data.map(item => {
+        return {
+          // html: '恭喜 北京市李**  136****8754 免费预约成功'
+          html: this.projectName + ' ' + (item.creatorName ? (item.creatorName || '').substr(0, 1) + '**' : '') + ' ' + (item.phone || '').substr(0, 3) + '****' + (item.phone || '').substr(7) + ' ' + ' 免费预约成功'
+        }
+      })
+    },
+    async handleSubmit () {
+      if (!this.form.name.trim()) {
+        return this.$toast('请输入姓名获得免费设计')
+      }
+      if (!this.form.phone.trim()) {
+        return this.$toast('请输入手机号，方便专业设计师联系您')
+      }
+      // console.log(this.form)
+      // 提交信息
+      const { data: resData = {} } = await axios({
+        url: origin + '/cjjjapi/wx/saveBizBookingUser4YL.action',
+        method: 'post',
+        data: this.form
+      })
+      const { code = 1, message = '', data = '' } = resData
+      if (code) {
+        this.$toast(message)
+      } else {
+        // this.$toast('预约成功')
+        console.log(data)
+        this.maskShow = true
+      }
+    },
+    handleVideo () {
+      let video = window.video
+      console.log(window.video.paused)
+      if (video.paused) {
+        video.play()
+      } else {
+        video.pause()
       }
     }
   },
@@ -271,7 +429,7 @@ export default {
     }
     .forbg {
       position: absolute;
-      width: 7.2rem;
+      width: 6.9rem;
       // height: 3.6rem;
       left: 50%;
       top: 1.4rem;
@@ -386,7 +544,7 @@ export default {
       &::before {
         content: '';
         position: absolute;
-        left: .4rem;
+        left: .3rem;
         top: 50%;
         width: .7rem;
         height: .26rem;
@@ -397,7 +555,7 @@ export default {
       &::after {
         content: '';
         position: absolute;
-        right: .4rem;
+        right: .3rem;
         top: 50%;
         width: .7rem;
         height: .26rem;
@@ -422,6 +580,9 @@ export default {
         font-weight: bold;
         border: 1px solid #415262;
         border-radius: .1rem;
+        &.last {
+          margin-right: 0;
+        }
       }
     }
   }
@@ -432,6 +593,7 @@ export default {
     padding-bottom: .4rem;
     margin-left: .3rem;
     margin-right: .3rem;
+    pointer-events: none;
     .quot-item {
       width: .46rem;
       height: .46rem;
@@ -524,8 +686,10 @@ export default {
       }
     }
     video {
+      position: relative;
+      z-index: 5;
       margin: .3rem;
-      width: 7.2rem;
+      width: 6.9rem;
     }
   }
   .house-cont {
