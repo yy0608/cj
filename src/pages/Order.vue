@@ -32,7 +32,7 @@
       </div>
       <div class="tc tips">*预约成功即可免费预览同户型3D全景效果图</div>
       <div class="tc submit-cont">
-        <img src="../assets/imgs/order/order.png" @click="maskShow = true">
+        <img src="../assets/imgs/order/order2.png" @click="maskShow = true">
       </div>
     </div>
     <div class="ordered-show">
@@ -69,7 +69,7 @@
       <div slot="loading">loading...</div>
     </slider>
     <div class="tc see-vr">
-      <img src="../assets/imgs/order/vr.png">
+      <img src="../assets/imgs/order/vr2.png">
     </div>
   </div>
   <div class="title-cont-item style-cont">
@@ -107,7 +107,7 @@
       <p>预览更多其他户型效果图</p>
     </div>
     <div class="button">
-      <img src="../assets/imgs/order/order.png">
+      <img src="../assets/imgs/order/order2.png">
     </div>
   </div>
   <div class="mask-cont" v-show="maskShow">
@@ -117,7 +117,7 @@
       <div class="content">您已成功获得童话森林•创家家居设计师免费量尺设计名额。</div>
       <div class="tips">（请留意客服来电）</div>
       <div class="vr">
-        <img src="../assets/imgs/order/vr.png" @click="maskShow = false">
+        <img src="../assets/imgs/order/vr2.png" @click="maskShow = false">
       </div>
     </div>
   </div>
@@ -330,7 +330,7 @@ export default {
     margin: .74rem .3rem .4rem;
     border: 1px solid #00474D;
     border-radius: .2rem;
-    padding: .56rem .65rem;
+    padding: .56rem .65rem .2rem;
     background-color: #fff;
     .form-item {
       display: flex;
@@ -366,9 +366,9 @@ export default {
     .submit-cont {
       margin-top: .2rem;
       img {
-        width: 2.6rem;
-        animation: scaleBtn 1s ease-out infinite alternate;
-        box-shadow: 0px 10px 20px 0px rgba(35,63,61,0.5);
+        width: 2.75rem;
+        // animation: scaleBtn 1s ease-out infinite alternate;
+        // box-shadow: 0px 10px 20px 0px rgba(35,63,61,0.5);
       }
     }
     .title-cont {
@@ -531,7 +531,7 @@ export default {
   .house-cont {
     position: relative;
     padding-top: .36rem;
-    padding-bottom: 1.1rem;
+    padding-bottom: .75rem;
     background-color: #F4DFCC;
     .title-bg {
       background: url('../assets/imgs/order/pen.png') no-repeat left center;
@@ -555,9 +555,9 @@ export default {
       position: relative;
       margin-top: .4rem;
       img {
-        width: 4.6rem;
-        animation: scaleBtn 1s ease-out infinite alternate;
-        box-shadow:0px 10px 20px 0px rgba(35,63,61,0.5);
+        width: 4.98rem;
+        // animation: scaleBtn 1s ease-out infinite alternate;
+        // box-shadow:0px 10px 20px 0px rgba(35,63,61,0.5);
       }
     }
   }
@@ -662,12 +662,12 @@ export default {
     }
     .button {
       flex-shrink: 0;
-      padding-left: .16rem;
+      // padding-left: .16rem;
       text-align: center;
       // box-shadow:0px 10px 20px 0px rgba(35,63,61,0.5);
       img {
         animation: scaleBtn 1s ease-out infinite alternate;
-        width: 2.4rem;
+        width: 2.75rem;
       }
     }
   }
@@ -755,8 +755,8 @@ export default {
     .vr {
       text-align: center;
       img {
-        width: 4.6rem;
-        animation: scaleBtn 1s ease-out infinite alternate;
+        width: 4.98rem;
+        // animation: scaleBtn 1s ease-out infinite alternate;
       }
     }
   }
