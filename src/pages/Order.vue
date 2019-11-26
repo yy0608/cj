@@ -1,9 +1,9 @@
 <template>
 <div class="page-item order-page-cont">
   <img class="logo-img" src="../assets/imgs/order/logo.png" style="position: relative; z-index: 5;">
-  <div class="tc bg-cont" style="margin-top: -.8rem;">
+  <div class="tc bg-cont" :style="{background: `url(${coverImg}) no-repeat center center`}">
     <!-- <img src="../assets/imgs/order/backbg.png"> -->
-    <img :src="coverImg" v-if="coverImg">
+    <!-- <img :src="coverImg" v-if="coverImg"> -->
     <img class="forbg" src="../assets/imgs/order/forbg.png">
   </div>
   <div class="steps-cont">
@@ -31,7 +31,7 @@
       </div>
       <div class="form-item">
         <div class="input-icon name"></div>
-        <input type="text" v-model.trim="form.name" placeholder="输入姓名获得免费设计">
+        <input type="text" ref="inputCont" v-model.trim="form.name" placeholder="输入姓名获得免费设计">
       </div>
       <div class="form-item">
         <div class="input-icon phone"></div>
@@ -78,7 +78,7 @@
       <div slot="loading">loading...</div>
     </slider>
     <div class="tc see-vr">
-      <img src="../assets/imgs/order/vr2.png">
+      <img src="../assets/imgs/order/vr2.png" @click="goScrollSubmit">
     </div>
   </div>
   <div class="title-cont-item style-cont">
@@ -106,10 +106,10 @@
       <div slot="loading">loading...</div>
     </slider>
   </div>
-  <div class="footer-cont">
+  <div class="footer-cont" :class="{'show': showFooter}">
     <div class="qrcode">
       <!-- <img src="../assets/imgs/order/code.jpg"> -->
-      <img :src="staticOrigin + qrCode" v-if="qrCode">
+      <img :src="qrCode" v-if="qrCode">
     </div>
     <div class="text">
       <p>识别左侧二维码</p>
@@ -117,7 +117,7 @@
       <p>预览更多其他户型效果图</p>
     </div>
     <div class="button">
-      <img src="../assets/imgs/order/order2.png">
+      <img src="../assets/imgs/order/order2.png" @click="goScrollSubmit">
     </div>
   </div>
   <div class="mask-cont" v-show="maskShow">
@@ -127,7 +127,7 @@
       <div class="content">您已成功获得童话森林•创家家居设计师免费量尺设计名额。</div>
       <div class="tips">（请留意客服来电）</div>
       <div class="vr">
-        <img src="../assets/imgs/order/vr2.png" @click="maskShow = false">
+        <img src="../assets/imgs/order/vr2.png" @click="goOuterUrl">
       </div>
     </div>
   </div>
@@ -136,7 +136,7 @@
 
 <script>
 import axios from 'axios'
-import { origin, staticOrigin } from '@/config'
+import { origin } from '@/config'
 import slider from 'vue-concise-slider'
 
 export default {
@@ -154,28 +154,18 @@ export default {
       sliderinitArr1: [], // 文字
       sliderinitArr2: [],
       sliderinitArr3: [],
+      showFooter: false, // 二维码底部滚动后显示
+      inited: false, // 初始化标识
       qrCode: '', // 二维码
+      linkUrl: '', // 预约保存成功后返回地址
       form: { // 提交信息
         name: '',
         phone: ''
       },
-      staticOrigin,
       stepsList: [
         // {
         //   img: 'step1.png',
         //   text: '团购价验房'
-        // },
-        // {
-        //   img: 'step2.png',
-        //   text: '免费上门量尺'
-        // },
-        // {
-        //   img: 'step3.png',
-        //   text: '免费设计出图'
-        // },
-        // {
-        //   img: 'step4.png',
-        //   text: '免费送货安装'
         // }
       ],
       sliderPages1: [],
@@ -184,40 +174,17 @@ export default {
       orderedListPages: [
         // {
         //   html: '恭喜 北京市李**  136****8754 免费预约成功'
-        // },
-        // {
-        //   html: '恭喜 深圳市邹**  186****8888 免费预约成功'
-        // },
-        // {
-        //   html: '恭喜 上海市吴**  166****6666 免费预约成功'
         // }
       ],
       sliderinit1: {
-        // currentPage: 0,
-        // thresholdDistance: 500,
-        // thresholdTime: 100,
         autoplay: 5000,
         loop: true,
-        // direction: 'row',
-        // infinite: 1,
-        // slidesToScroll: 1,
-        // timingFunction: 'ease',
         duration: 300
-        // renderPagination: (h, index) => {
-        //   return h('div', {
-        //     class: 'pagination-item'
-        //   }, [arr1[index - 1]])
-        // }
       },
       sliderinit2: {
         autoplay: 5000,
         loop: true,
         duration: 300
-        // renderPagination: (h, index) => {
-        //   return h('div', {
-        //     class: 'pagination-item'
-        //   }, [arr2[index - 1]])
-        // }
       },
       sliderinit3: {
         autoplay: 5000,
@@ -238,6 +205,19 @@ export default {
     this.getPics()
     this.getInventory()
     this.getOrderList()
+  },
+  mounted () {
+    setTimeout(() => {
+      window.onscroll = () => {
+        if (this.inited) {
+          window.onscroll = null
+        } else {
+          this.showFooter = true
+          this.inited = true
+        }
+        // console.log(document.documentElement.scrollTop)
+      }
+    }, 1500)
   },
   methods: {
     // 引流图文
@@ -260,15 +240,6 @@ export default {
         }
       }
     },
-    // 二维码链接
-    // async getCode () {
-    //   const { data: resData = {} } = await axios({
-    //     url: origin + '/cjjjapi/wx/getTwoDimensionCodeLinking.action',
-    //     method: 'post',
-    //     data: {}
-    //   })
-    //   console.log(resData)
-    // },
     // 引流图片，大部分图片来自此处
     async getPics () {
       const { data: resData = {} } = await axios({
@@ -394,9 +365,14 @@ export default {
         this.$toast(message)
       } else {
         // this.$toast('预约成功')
-        console.log(data)
+        this.linkUrl = data
         this.maskShow = true
       }
+    },
+    goScrollSubmit () {
+      let offsetTop = this.$refs.inputCont.offsetTop
+      document.documentElement.scrollTop = offsetTop + document.documentElement.clientHeight / 2
+      this.$refs.inputCont.focus()
     },
     handleVideo () {
       let video = window.video
@@ -406,6 +382,10 @@ export default {
       } else {
         video.pause()
       }
+    },
+    goOuterUrl () {
+      this.maskShow = false
+      window.location.href = this.linkUrl
     }
   },
   components: {
@@ -419,11 +399,14 @@ export default {
 @import '../assets/css/common.scss';
 
 .order-page-cont {
+  padding-bottom: 1.6rem;
   .logo-img {
     width: 4.4rem;
   }
   .bg-cont {
     position: relative;
+    height: 5.6rem;
+    background-size: cover !important;
     & > img {
       max-width: 100%;
     }
@@ -444,12 +427,15 @@ export default {
   }
   .step-item {
     position: relative;
+    height: 1.76rem;
     .img {
       width: 1.4rem;
     }
     .txt {
       margin-top: .1rem;
       font-size: .24rem;
+      height: .24rem;
+      line-height: .26rem;
       color: #1F524E;
     }
     .rect {
@@ -525,7 +511,7 @@ export default {
       margin-top: .2rem;
       img {
         width: 2.75rem;
-        // animation: scaleBtn 1s ease-out infinite alternate;
+        animation: scaleBtn 1s ease-out infinite alternate;
         // box-shadow: 0px 10px 20px 0px rgba(35,63,61,0.5);
       }
     }
@@ -773,6 +759,9 @@ export default {
       margin: .68rem .3rem 0;
       width: initial;
       background-color: #fff;
+      .slider-touch {
+        pointer-events: none;
+      }
       .slider-item {
         height: 3.88rem;
         background-size: cover !important;
@@ -802,14 +791,28 @@ export default {
     }
   }
   .footer-cont {
+    position: fixed;
+    left: 0;
+    bottom: -1.6rem;
+    width: 100%;
+    height: 1.6rem;
+    box-sizing: border-box;
+    z-index: 9;
     display: flex;
     align-items: center;
     padding: .2rem;
     background-color: #C5DEDB;
+    transition: bottom ease .2s;
+    &.show {
+      bottom: 0;
+    }
     .qrcode {
       flex-shrink: 0;
       img {
-        width: 1.6rem;
+        width: 1.3rem;
+        padding: .06rem;
+        box-sizing: border-box;
+        background: #fff;
       }
     }
     .text {
@@ -839,6 +842,9 @@ export default {
     margin: .68rem .3rem;
     width: initial;
     background-color: #fff;
+    .slider-touch {
+      pointer-events: none;
+    }
     .slider-item {
       height: 3.88rem;
       background-size: cover !important;
