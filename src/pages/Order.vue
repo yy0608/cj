@@ -31,7 +31,7 @@
       </div>
       <div class="form-item">
         <div class="input-icon name"></div>
-        <input type="text" ref="inputCont" v-model.trim="form.name" placeholder="输入姓名获得免费设计">
+        <input type="text" ref="inputCont" v-model.trim="form.creatorName" placeholder="输入姓名获得免费设计">
       </div>
       <div class="form-item">
         <div class="input-icon phone"></div>
@@ -64,7 +64,7 @@
       <div class="play-icon" @click="handleVideo"></div>
     </div>
     <!-- <video src="../assets/file/order.mp4"></video> -->
-    <video :src="videoSrc" id="video"></video>
+    <!-- <video :src="videoSrc" id="video"></video> -->
   </div>
   <div class="title-cont-item house-cont">
     <div class="title-bg"></div>
@@ -131,6 +131,10 @@
       </div>
     </div>
   </div>
+  <div class="video-mask" v-show="showVideo">
+    <div class="close-btn" @click="closeVideo">x</div>
+    <video :src="videoSrc" id="video"></video>
+  </div>
 </div>
 </template>
 
@@ -145,6 +149,7 @@ export default {
     // let arr2 = ['时尚简奢', '北欧', '现代简约', '新中式']
     // let arr3 = ['验房团购', '免费出方案', '现金抵扣']
     return {
+      showVideo: false,
       maskShow: false,
       coverImg: '', // 封面背景
       videoCover: '', // 视频封面
@@ -159,7 +164,7 @@ export default {
       qrCode: '', // 二维码
       linkUrl: '', // 预约保存成功后返回地址
       form: { // 提交信息
-        name: '',
+        creatorName: '',
         phone: ''
       },
       stepsList: [
@@ -342,12 +347,12 @@ export default {
       this.orderedListPages = data.map(item => {
         return {
           // html: '恭喜 北京市李**  136****8754 免费预约成功'
-          html: this.projectName + ' ' + (item.creatorName ? (item.creatorName || '').substr(0, 1) + '**' : '') + ' ' + (item.phone || '').substr(0, 3) + '****' + (item.phone || '').substr(7) + ' ' + ' 免费预约成功'
+          html: this.projectName + ' ' + (item.creatorName || '') + ' ' + (item.phone || '') + ' ' + ' 免费预约成功'
         }
       })
     },
     async handleSubmit () {
-      if (!this.form.name.trim()) {
+      if (!this.form.creatorName.trim()) {
         return this.$toast('请输入姓名获得免费设计')
       }
       if (!this.form.phone.trim()) {
@@ -376,12 +381,17 @@ export default {
     },
     handleVideo () {
       let video = window.video
-      console.log(window.video.paused)
+      this.showVideo = true
       if (video.paused) {
         video.play()
       } else {
         video.pause()
       }
+    },
+    closeVideo () {
+      let video = window.video
+      this.showVideo = false
+      video.pause()
     },
     goOuterUrl () {
       this.maskShow = false
@@ -928,6 +938,36 @@ export default {
         width: 4.98rem;
         // animation: scaleBtn 1s ease-out infinite alternate;
       }
+    }
+  }
+  .video-mask {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 11;
+    background-color: #000;
+    .close-btn {
+      position: absolute;
+      top: .3rem;
+      right: .3rem;
+      width: .4rem;
+      height: .4rem;
+      line-height: .4rem;
+      font-size: .24rem;
+      border-radius: .2rem;
+      text-align: center;
+      color: #333;
+      background: #fff;
+    }
+    video {
+      position: absolute;
+      width: 6.9rem;
+      left: 50%;
+      top: 50%;
+      margin-left: -3.45rem;
+      margin-top: -2rem;
     }
   }
 }
