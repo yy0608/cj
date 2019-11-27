@@ -5,11 +5,11 @@ import App from './pages/Order.vue'
 
 import { Toast, Indicator } from 'mint-ui'
 
-import FastClick from 'fastclick'
+// import FastClick from 'fastclick'
 
-window.addEventListener('load', () => {
-  FastClick.attach(document.body)
-})
+// window.addEventListener('load', () => {
+//   FastClick.attach(document.body)
+// })
 
 Vue.prototype.$toast = Toast
 Vue.prototype.$indicator = Indicator
