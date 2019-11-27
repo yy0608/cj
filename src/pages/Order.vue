@@ -58,10 +58,11 @@
   <div class="title-cont-item video-cont">
     <div class="title-bg"></div>
     <div class="white-block"></div>
-    <div class="video-trigger">
+    <div class="video-trigger" :class="{'hide-bg': !videoPaused}" :style="{background: `url(${videoCover}) no-repeat center center`}">
       <!-- <img src="../assets/imgs/order/bed.png"> -->
-      <img :src="videoCover">
-      <div class="play-icon" @click="handleVideo"></div>
+      <!-- <img :src="videoCover"> -->
+      <video :src="videoSrc" id="video" controls playsinline webkit-playsinline x-webkit-airplay preload></video>
+      <!-- <div class="play-icon" @click="handleVideo" v-show="videoPaused"></div> -->
     </div>
     <!-- <video src="../assets/file/order.mp4"></video> -->
     <!-- <video :src="videoSrc" id="video"></video> -->
@@ -131,10 +132,10 @@
       </div>
     </div>
   </div>
-  <div class="video-mask" v-show="showVideo">
+  <!-- <div class="video-mask" v-show="showVideo">
     <div class="close-btn" @click="closeVideo">x</div>
     <video :src="videoSrc" id="video"></video>
-  </div>
+  </div> -->
 </div>
 </template>
 
@@ -149,8 +150,9 @@ export default {
     // let arr2 = ['时尚简奢', '北欧', '现代简约', '新中式']
     // let arr3 = ['验房团购', '免费出方案', '现金抵扣']
     return {
-      showVideo: false,
-      maskShow: false,
+      // showVideo: false,
+      videoPaused: true, // 视频暂停
+      maskShow: false, // 保存预约
       coverImg: '', // 封面背景
       videoCover: '', // 视频封面
       videoSrc: '', // 视频地址
@@ -220,9 +222,14 @@ export default {
           this.showFooter = true
           this.inited = true
         }
-        // console.log(document.documentElement.scrollTop)
       }
     }, 1500)
+    window.video.onplay = () => {
+      this.videoPaused = false
+    }
+    // window.video.onpause = () => {
+    //   this.videoPaused = true
+    // }
   },
   methods: {
     // 引流图文
@@ -381,18 +388,20 @@ export default {
     },
     handleVideo () {
       let video = window.video
-      this.showVideo = true
+      // this.showVideo = true
       if (video.paused) {
         video.play()
+        this.videoPaused = false
       } else {
         video.pause()
+        this.videoPaused = true
       }
     },
-    closeVideo () {
-      let video = window.video
-      this.showVideo = false
-      video.pause()
-    },
+    // closeVideo () {
+    //   let video = window.video
+    //   this.showVideo = false
+    //   video.pause()
+    // },
     goOuterUrl () {
       this.maskShow = false
       window.location.href = this.linkUrl
@@ -608,11 +617,14 @@ export default {
     }
     .slider-container {
       margin: 0 .28rem;
-      height: .26rem;
+      height: .38rem;
+      line-height: .38rem;
       .slider-item {
         color: #333;
         font-size: .26rem;
-        line-height: .26rem;
+        height: .3rem;
+        line-height: .3rem;
+        padding: .04rem 0;
       }
     }
   }
@@ -665,7 +677,11 @@ export default {
     }
     .video-trigger {
       position: relative;
-      margin: .8rem .3rem;
+      margin: .6rem .3rem .8rem;
+      background-size: cover !important;
+      &.hide-bg {
+        background: none !important;
+      }
       img {
         width: 100%;
       }
@@ -673,6 +689,7 @@ export default {
         position: absolute;
         left: 50%;
         top: 50%;
+        z-index: 6;
         margin-left: -.45rem;
         margin-top: -.45rem;
         width: .9rem;
@@ -684,7 +701,7 @@ export default {
     video {
       position: relative;
       z-index: 5;
-      margin: .3rem;
+      // margin: .3rem;
       width: 6.9rem;
     }
   }
