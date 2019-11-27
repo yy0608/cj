@@ -35,7 +35,7 @@
       </div>
       <div class="form-item">
         <div class="input-icon phone"></div>
-        <input type="text" v-model.trim="form.phone" placeholder="方便专业设计师联系您">
+        <input type="tel" v-model.trim="form.phone" placeholder="方便专业设计师联系您">
       </div>
       <div class="tc tips">*预约成功即可免费预览同户型3D全景效果图</div>
       <div class="tc submit-cont">
@@ -130,6 +130,7 @@
       <div class="vr">
         <img src="../assets/imgs/order/vr2.png" @click="goOuterUrl">
       </div>
+      <div class="close" @click="maskShow = false"></div>
     </div>
   </div>
   <!-- <div class="video-mask" v-show="showVideo">
@@ -152,7 +153,7 @@ export default {
     return {
       // showVideo: false,
       videoPaused: true, // 视频暂停
-      maskShow: false, // 保存预约
+      maskShow: false, // 保存预约后的弹窗
       coverImg: '', // 封面背景
       videoCover: '', // 视频封面
       videoSrc: '', // 视频地址
@@ -955,6 +956,16 @@ export default {
         width: 4.98rem;
         // animation: scaleBtn 1s ease-out infinite alternate;
       }
+    }
+    .close {
+      position: absolute;
+      right: .1rem;
+      top: .1rem;
+      width: .6rem;
+      height: .6rem;
+      opacity: .5;
+      background: url('../assets/imgs/order/close.png') no-repeat center center;
+      background-size: .32rem auto;
     }
   }
   .video-mask {
