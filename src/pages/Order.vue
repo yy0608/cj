@@ -217,7 +217,7 @@ export default {
   mounted () {
     setTimeout(() => {
       window.onscroll = () => {
-        let scrollTop = window.document.documentElement.scrollTop
+        let scrollTop = window.document.body.scrollTop + window.document.documentElement.scrollTop
         if (scrollTop < 300) {
           this.showFooter = false
         } else {
