@@ -163,7 +163,7 @@ export default {
       sliderinitArr2: [],
       sliderinitArr3: [],
       showFooter: false, // 二维码底部滚动后显示
-      inited: false, // 初始化标识
+      // inited: false, // 初始化标识
       qrCode: '', // 二维码
       linkUrl: '', // 预约保存成功后返回地址
       form: { // 提交信息
@@ -217,12 +217,18 @@ export default {
   mounted () {
     setTimeout(() => {
       window.onscroll = () => {
-        if (this.inited) {
-          window.onscroll = null
+        let scrollTop = window.document.documentElement.scrollTop
+        if (scrollTop < 300) {
+          this.showFooter = false
         } else {
           this.showFooter = true
-          this.inited = true
         }
+        // if (this.inited) {
+        //   window.onscroll = null
+        // } else {
+        //   this.showFooter = true
+        //   this.inited = true
+        // }
       }
     }, 1500)
     window.video.onplay = () => {
