@@ -37,7 +37,7 @@
         <div class="input-icon phone"></div>
         <input type="tel" v-model.trim="form.phone" placeholder="方便专业设计师联系您">
       </div>
-      <div class="tc tips">*预约成功即可免费预览同户型3D全景效果图</div>
+      <div class="tc tips">预约成功即可免费预览同户型3D全景效果图</div>
       <div class="tc submit-cont">
         <img src="../assets/imgs/order/order2.png" @click="handleSubmit">
       </div>
@@ -142,7 +142,7 @@
 
 <script>
 import axios from 'axios'
-import { origin } from '@/config'
+import { originOrder } from '@/config'
 import slider from 'vue-concise-slider'
 
 export default {
@@ -242,7 +242,7 @@ export default {
     // 引流图文
     async getImgText () {
       const { data: resData = {} } = await axios({
-        url: origin + '/cjjjapi/wx/getDrainageParams.action',
+        url: originOrder + '/cjjjapi/wx/getDrainageParams.action',
         method: 'post',
         data: {}
       })
@@ -262,7 +262,7 @@ export default {
     // 引流图片，大部分图片来自此处
     async getPics () {
       const { data: resData = {} } = await axios({
-        url: origin + '/cjjjapi/wx/findBizMultiPicssYl.action',
+        url: originOrder + '/cjjjapi/wx/findBizMultiPicssYl.action',
         method: 'post',
         data: {
           pageNo: 1,
@@ -343,7 +343,7 @@ export default {
     // 虚拟库存
     async getInventory () {
       const { data: resData = {} } = await axios({
-        url: origin + '/cjjjapi/wx/getInventoryQuantity.action',
+        url: originOrder + '/cjjjapi/wx/getInventoryQuantity.action',
         method: 'post',
         data: {}
       })
@@ -353,7 +353,7 @@ export default {
     // 预约记录
     async getOrderList () {
       const { data: resData = {} } = await axios({
-        url: origin + '/cjjjapi/wx/findBizBookingUsersAll.action',
+        url: originOrder + '/cjjjapi/wx/findBizBookingUsersAll.action',
         method: 'post',
         data: {}
       })
@@ -375,7 +375,7 @@ export default {
       // console.log(this.form)
       // 提交信息
       const { data: resData = {} } = await axios({
-        url: origin + '/cjjjapi/wx/saveBizBookingUser4YL.action',
+        url: originOrder + '/cjjjapi/wx/saveBizBookingUser4YL.action',
         method: 'post',
         data: this.form
       })
@@ -530,8 +530,10 @@ export default {
       }
     }
     .tips {
-      font-size: .24rem;
+      margin-top: .25rem;
+      font-size: .28rem;
       color: #666666;
+      animation: heartBeat 1.1s ease infinite alternate;
     }
     .submit-cont {
       margin-top: .2rem;
@@ -1009,5 +1011,96 @@ export default {
   0% {transform: scale(1);}
   50% {transform: scale(1.1);}
   100% {transform: scale(1);}
+}
+@keyframes bounceIn {
+    0%,20%,40%,60%,80%,to {
+        -webkit-animation-timing-function: cubic-bezier(.215,.61,.355,1);
+        animation-timing-function: cubic-bezier(.215,.61,.355,1)
+    }
+
+    0% {
+        opacity: 0;
+        -webkit-transform: scale3d(.3,.3,.3);
+        transform: scale3d(.3,.3,.3)
+    }
+
+    20% {
+        -webkit-transform: scale3d(1.1,1.1,1.1);
+        transform: scale3d(1.1,1.1,1.1)
+    }
+
+    40% {
+        -webkit-transform: scale3d(.9,.9,.9);
+        transform: scale3d(.9,.9,.9)
+    }
+
+    60% {
+        opacity: 1;
+        -webkit-transform: scale3d(1.03,1.03,1.03);
+        transform: scale3d(1.03,1.03,1.03)
+    }
+
+    80% {
+        -webkit-transform: scale3d(.97,.97,.97);
+        transform: scale3d(.97,.97,.97)
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: scaleX(1);
+        transform: scaleX(1)
+    }
+}
+@keyframes tada {
+    0% {
+        -webkit-transform: scaleX(1);
+        transform: scaleX(1)
+    }
+
+    10%,20% {
+        -webkit-transform: scale3d(.9,.9,.9) rotate(-3deg);
+        transform: scale3d(.9,.9,.9) rotate(-3deg)
+    }
+
+    30%,50%,70%,90% {
+        -webkit-transform: scale3d(1.1,1.1,1.1) rotate(3deg);
+        transform: scale3d(1.1,1.1,1.1) rotate(3deg)
+    }
+
+    40%,60%,80% {
+        -webkit-transform: scale3d(1.1,1.1,1.1) rotate(-3deg);
+        transform: scale3d(1.1,1.1,1.1) rotate(-3deg)
+    }
+
+    to {
+        -webkit-transform: scaleX(1);
+        transform: scaleX(1)
+    }
+}
+@keyframes heartBeat {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1)
+    }
+
+    14% {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1)
+    }
+
+    28% {
+        -webkit-transform: scale(1);
+        transform: scale(1)
+    }
+
+    42% {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1)
+    }
+
+    70% {
+        -webkit-transform: scale(1);
+        transform: scale(1)
+    }
 }
 </style>
