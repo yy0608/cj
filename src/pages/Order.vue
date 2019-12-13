@@ -1,6 +1,6 @@
 <template>
 <div class="page-item order-page-cont">
-  <img class="logo-img" src="../assets/imgs/order/logo.png" style="position: relative; z-index: 5;">
+  <img class="logo-img" src="../assets/imgs/order/logo2.png">
   <div class="tc bg-cont" :style="{background: `url(${coverImg}) no-repeat center center`}">
     <!-- <img src="../assets/imgs/order/backbg.png"> -->
     <!-- <img :src="coverImg" v-if="coverImg"> -->
@@ -427,7 +427,12 @@ export default {
 .order-page-cont {
   padding-bottom: 1.6rem;
   .logo-img {
-    width: 4.4rem;
+    // width: 4.4rem;
+    width: 3.74rem;
+    margin-left: .2rem;
+    margin-top: .1rem;
+    position: relative;
+    z-index: 5;
   }
   .bg-cont {
     position: relative;
