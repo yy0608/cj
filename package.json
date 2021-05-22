@@ -19,7 +19,8 @@
     "progress-bar-webpack-plugin": "^1.12.1",
     "sass-loader": "^7.0.1",
     "vue": "^2.5.2",
-    "vue-concise-slider": "^2.4.8"
+    "vue-concise-slider": "^2.4.8",
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
