@@ -1,5 +1,5 @@
 <template>
   <div>
-    详情
+    更多细节内容
   </div>
 </template>

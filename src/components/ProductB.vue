@@ -1,5 +1,5 @@
 <template>
   <div>
-    我是产品B的内容：bbb
+    产品信息的内容：bbb
   </div>
 </template>

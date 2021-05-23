@@ -37,14 +37,15 @@ function render() {
 
   instance = new Vue({
     router,
-    render: h => {
-      if (instance) {
-        // 子应用的页面缓存（如果是单页面里的，只用keep-alive就行）
-        instance._vnode.data.keepAlive = true;
-        return instance._vnode;
-      }
-      return h(App);
-    }
+    render: h => h(App),
+    // render: h => {
+    //   if (instance) {
+    //     // 子应用的页面缓存（如果是单页面里的，只用keep-alive就行）
+    //     instance._vnode.data.keepAlive = true;
+    //     return instance._vnode;
+    //   }
+    //   return h(App);
+    // }
   }).$mount("#app");
 }
 

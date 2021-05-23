@@ -1,8 +1,8 @@
 <template>
   <div>
     <div>
-      <router-link to="/product/a">产品A</router-link>
-      <router-link to="/product/b">产品B</router-link>
+      <router-link to="/product/a">产品分类</router-link>
+      <router-link to="/product/b">产品信息</router-link>
     </div>
     <div class="mt-20">
       <keep-alive>

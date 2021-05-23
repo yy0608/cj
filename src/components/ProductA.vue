@@ -1,6 +1,8 @@
 <template>
   <div>
-    我是产品A的内容：aaa
-    <input type="text">
+    产品分类的内容：aaa
+    <div>
+      <input type="text">
+    </div>
   </div>
 </template>
