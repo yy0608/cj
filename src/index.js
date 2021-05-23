@@ -18,9 +18,28 @@ Vue.prototype.$messageBox = MessageBox
 
 Vue.config.productionTip = false
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  components: { App },
-  template: '<App/>'
-})
+let instance = null
+function render() {
+  instance = new Vue({
+    el: '#app',
+    components: { App },
+    template: '<App/>'
+  })
+}
+
+if (window.__POWERED_BY_QIANKUN__) {
+  __webpack_public_path__ = window.__INJECTED_PUBLIC_PATH_BY_QIANKUN__;
+} else {
+  render()
+}
+
+export async function bootstrap() {
+  console.log('home bootstrap')
+}
+export async function mount() {
+  render()
+  console.log('home mount')
+}
+export async function unmount() {
+  console.log('home unmount')
+}

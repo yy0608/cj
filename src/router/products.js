@@ -5,7 +5,7 @@ import Vue from 'vue'
 
 Vue.use(VueRouter)
 
-export default new VueRouter({
+const router = new VueRouter({
   routes: [
     {
       path: '/',
@@ -24,3 +24,5 @@ export default new VueRouter({
     }
   ]
 })
+
+export default router

@@ -37,7 +37,6 @@ const getEntries = globPath => {
     } else if (extname === '.js') {
       entries[basename] = entry
     }
-
   })
 
   return entries
@@ -49,6 +48,9 @@ module.exports = {
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
+    library: 'SubApp', // 官方文档说要指定和注册时定义的name一致，但是多页面应用，此处可用但有疑问
+    libraryTarget: 'umd', // 必须配置为umd，导出的bootstrap,mount,unmount必须挂在library下
+    // jsonpFunction: 'webpackJsonp_cj',
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
