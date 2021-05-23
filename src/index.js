@@ -3,28 +3,18 @@
 import Vue from 'vue'
 import App from './pages/Index.vue'
 
-import { Toast, Loadmore, Indicator, MessageBox } from 'mint-ui'
-
-// import FastClick from 'fastclick'
-
-// window.addEventListener('load', () => {
-//   FastClick.attach(document.body)
-// })
-
-Vue.component(Loadmore.name, Loadmore)
-Vue.prototype.$toast = Toast
-Vue.prototype.$indicator = Indicator
-Vue.prototype.$messageBox = MessageBox
-
-Vue.config.productionTip = false
-
 let instance = null
 function render() {
   instance = new Vue({
-    el: '#app',
-    components: { App },
-    template: '<App/>'
-  })
+    render: h => {
+      if (instance) {
+        // 子应用的页面缓存（如果是单页面里的，只用keep-alive就行）
+        instance._vnode.data.keepAlive = true;
+        return instance._vnode;
+      }
+      return h(App);
+    }
+  }).$mount("#app");
 }
 
 if (window.__POWERED_BY_QIANKUN__) {

@@ -8,7 +8,6 @@
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
-      <!-- <router-view :keep-alive="keepAlive"></router-view> -->
     </div>
   </div>
 </template>
@@ -18,13 +17,3 @@
   margin-top: 20px;
 }
 </style>
-
-<script>
-export default {
-  data() {
-    return {
-      keepAlive: true
-    }
-  }
-}
-</script>
